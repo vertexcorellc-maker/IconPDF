@@ -1,0 +1,57 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE_NAME } from '../site';
+---
+
+<Base
+  title={`Split PDF Free, No Upload | ${SITE_NAME}`}
+  description="Extract pages from a PDF or split it into separate files, right in your browser. Free, unlimited and private: your file is never uploaded."
+>
+  <section class="tool-head">
+    <h1>Split PDF</h1>
+    <p class="lede">Pick the pages you want, then extract them or split each into its own file.</p>
+  </section>
+
+  <section class="tool" id="split-tool" data-state="idle">
+    <label class="drop" id="drop">
+      <input type="file" id="file" accept="application/pdf" hidden />
+      <span class="drop-icon" aria-hidden="true">＋</span>
+      <strong>Choose a PDF</strong>
+      <span>or drag and drop it here</span>
+      <span class="drop-hint">One PDF file</span>
+    </label>
+
+    <div class="stage" id="stage" hidden>
+      <div class="busy" id="busy" hidden>
+        <div class="busy-box"><p id="status">Loading pages…</p></div>
+      </div>
+      <div class="select-bar">
+        <button type="button" class="btn btn-small" id="all">Select all</button>
+        <button type="button" class="btn btn-small" id="none">Select none</button>
+        <span class="muted" id="count"></span>
+      </div>
+      <div class="page-grid" id="grid"></div>
+      <div class="controls">
+        <p class="note" id="note"></p>
+        <div class="actions">
+          <button type="button" class="btn" id="reset">New file</button>
+          <button type="button" class="btn" id="splitzip">Selected → separate files (ZIP)</button>
+          <button type="button" class="btn btn-primary" id="extract">Extract selected (1 PDF)</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="copy">
+    <h2>How it works</h2>
+    <ol>
+      <li>Open a PDF. Click pages to select or deselect them.</li>
+      <li><strong>Extract</strong> puts the selected pages into one new PDF.</li>
+      <li><strong>Separate files</strong> saves each selected page as its own PDF in a ZIP.</li>
+    </ol>
+  </section>
+
+  <script>
+    import '../tools/split/ui.ts';
+  </script>
+</Base>

@@ -1,0 +1,66 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE_NAME } from '../site';
+---
+
+<Base
+  title={`PDF to JPG Free, No Upload | ${SITE_NAME}`}
+  description="Convert each PDF page into a JPG or PNG image, right in your browser. Free, unlimited and private: your file is never uploaded."
+>
+  <section class="tool-head">
+    <h1>PDF to JPG</h1>
+    <p class="lede">Save every page of a PDF as an image. Nothing is uploaded.</p>
+  </section>
+
+  <section class="tool" id="p2j-tool" data-state="idle">
+    <label class="drop" id="drop">
+      <input type="file" id="file" accept="application/pdf" hidden />
+      <span class="drop-icon" aria-hidden="true">＋</span>
+      <strong>Choose a PDF</strong>
+      <span>or drag and drop it here</span>
+      <span class="drop-hint">One PDF file</span>
+    </label>
+
+    <div class="stage" id="stage" hidden>
+      <div class="busy" id="busy" hidden>
+        <div class="busy-box"><p id="status">Loading pages…</p></div>
+      </div>
+      <div class="opt-row">
+        <label class="opt">Format
+          <select id="fmt">
+            <option value="image/jpeg">JPG</option>
+            <option value="image/png">PNG</option>
+          </select>
+        </label>
+        <label class="opt">Quality
+          <select id="scale">
+            <option value="1.5">Normal</option>
+            <option value="2.5" selected>High</option>
+            <option value="3.5">Max</option>
+          </select>
+        </label>
+      </div>
+      <div class="page-grid" id="grid"></div>
+      <div class="controls">
+        <p class="note" id="note"></p>
+        <div class="actions">
+          <button type="button" class="btn" id="reset">New file</button>
+          <button type="button" class="btn btn-primary" id="download">Download images</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="copy">
+    <h2>How it works</h2>
+    <ol>
+      <li>Open a PDF. Every page is shown as a preview.</li>
+      <li>Choose JPG or PNG and the quality.</li>
+      <li>Click Download. A single page saves as an image; several pages save as a ZIP.</li>
+    </ol>
+  </section>
+
+  <script>
+    import '../tools/pdftojpg/ui.ts';
+  </script>
+</Base>

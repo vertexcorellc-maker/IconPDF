@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE_NAME } from '../site';
+---
+
+<Base
+  title={`Organize PDF: Reorder, Rotate & Delete Pages | ${SITE_NAME}`}
+  description="Reorder, rotate and delete PDF pages visually in your browser. Free, unlimited and private: your file is never uploaded."
+>
+  <section class="tool-head">
+    <h1>Organize PDF</h1>
+    <p class="lede">Drag pages to reorder, rotate or delete them, then save. Nothing is uploaded.</p>
+  </section>
+
+  <section class="tool" id="org-tool" data-state="idle">
+    <label class="drop" id="drop">
+      <input type="file" id="file" accept="application/pdf" hidden />
+      <span class="drop-icon" aria-hidden="true">＋</span>
+      <strong>Choose a PDF</strong>
+      <span>or drag and drop it here</span>
+      <span class="drop-hint">One PDF file</span>
+    </label>
+
+    <div class="stage" id="stage" hidden>
+      <div class="busy" id="busy" hidden>
+        <div class="busy-box"><p id="status">Loading pages…</p></div>
+      </div>
+      <div class="page-grid" id="grid"></div>
+      <div class="controls">
+        <p class="note" id="note"></p>
+        <div class="actions">
+          <button type="button" class="btn" id="reset">New file</button>
+          <button type="button" class="btn btn-primary" id="apply">Apply &amp; download</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="copy">
+    <h2>How it works</h2>
+    <ol>
+      <li>Open a PDF. Every page appears as a thumbnail.</li>
+      <li>Drag pages to reorder, use ⟳ to rotate, or ✕ to delete.</li>
+      <li>Click Apply. The new PDF downloads straight from your browser.</li>
+    </ol>
+    <h2>Questions</h2>
+    <h3>Is my file uploaded?</h3>
+    <p>No. The PDF is opened and rebuilt on your own computer; it never leaves this tab.</p>
+  </section>
+
+  <script>
+    import '../tools/organize/ui.ts';
+  </script>
+</Base>

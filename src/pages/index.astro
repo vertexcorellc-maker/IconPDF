@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE_NAME, SITE_TAGLINE, TOOLS, GROUPS } from '../site';
+---
+
+<Base
+  title={`${SITE_NAME}: ${SITE_TAGLINE}`}
+  description="Every PDF tool you need, running entirely in your browser. Merge, organize, convert, edit and secure PDFs with no uploads, no sign-up and no limits."
+>
+  <section class="hero">
+    <h1>Every PDF tool.<br />Nothing leaves your device.</h1>
+    <p class="lede">
+      Merge, organize, convert and secure your PDFs right in the browser. No uploads, no sign-up,
+      no file limits.
+    </p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="/merge-pdf">Merge PDFs</a>
+      <a class="btn" href="/organize-pdf">Organize a PDF</a>
+    </div>
+    <p class="hero-trust">🔒 Your files are processed on your computer and never uploaded.</p>
+  </section>
+
+  {
+    GROUPS.map((group) => {
+      const tools = TOOLS.filter((t) => t.group === group);
+      if (!tools.length) return null;
+      return (
+        <section class="group" id={group === 'Organize' ? 'tools' : undefined}>
+          <h2 class="group-title">{group}</h2>
+          <div class="tool-grid">
+            {tools.map((tool) =>
+              tool.ready ? (
+                <a class="tool-card" href={`/${tool.slug}`}>
+                  <div class="tool-top">
+                    <h3>{tool.title}</h3>
+                    {tool.credits ? (
+                      <span class="tag tag-ai">AI credits</span>
+                    ) : (
+                      <span class="tag tag-free">Free &amp; local</span>
+                    )}
+                  </div>
+                  <p>{tool.blurb}</p>
+                  <span class="tool-go">Open tool →</span>
+                </a>
+              ) : (
+                <div class="tool-card is-soon">
+                  <div class="tool-top">
+                    <h3>{tool.title}</h3>
+                    {tool.credits ? (
+                      <span class="tag tag-ai">AI credits</span>
+                    ) : (
+                      <span class="tag tag-free">Free &amp; local</span>
+                    )}
+                  </div>
+                  <p>{tool.blurb}</p>
+                  <span class="tool-soon">Coming soon</span>
+                </div>
+              )
+            )}
+          </div>
+        </section>
+      );
+    })
+  }
+</Base>

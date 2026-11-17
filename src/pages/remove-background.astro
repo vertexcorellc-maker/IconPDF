@@ -1,0 +1,96 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE_NAME } from '../site';
+---
+
+<Base
+  title={`Remove Background from Image Free | ${SITE_NAME}`}
+  description="Remove the background from any photo in one click. Free and unlimited, with no upload: the AI runs in your browser and your image stays on your device."
+>
+  <section class="tool-head">
+    <h1>Remove image background</h1>
+    <p class="lede">One click, full resolution, no upload. Your photo stays on your device.</p>
+  </section>
+
+  <section class="tool" id="bg-tool" data-state="idle">
+    <label class="drop" id="drop">
+      <input type="file" id="file" accept="image/png,image/jpeg,image/webp" hidden />
+      <span class="drop-icon" aria-hidden="true">＋</span>
+      <strong>Choose an image</strong>
+      <span>or drag and drop, or paste from the clipboard</span>
+      <span class="drop-hint">PNG, JPG or WebP</span>
+    </label>
+
+    <div class="stage" id="stage" hidden>
+      <div class="compare" id="compare">
+        <img id="orig" alt="Original image" />
+        <div class="cut" id="cut">
+          <canvas id="out"></canvas>
+        </div>
+        <div class="busy" id="busy">
+          <div class="busy-box">
+            <p id="status">Preparing…</p>
+            <div class="bar"><div class="bar-fill" id="bar"></div></div>
+          </div>
+        </div>
+        <input
+          type="range"
+          id="slider"
+          min="0"
+          max="100"
+          value="50"
+          aria-label="Compare original and result"
+        />
+        <div class="divider" id="divider" aria-hidden="true"></div>
+      </div>
+
+      <div class="controls" id="controls">
+        <div class="swatches" role="group" aria-label="Background">
+          <button type="button" class="swatch is-active" data-bg="transparent" title="Transparent"
+          ></button>
+          <button type="button" class="swatch" data-bg="#ffffff" title="White" style="background:#fff"
+          ></button>
+          <button type="button" class="swatch" data-bg="#111111" title="Black" style="background:#111"
+          ></button>
+          <label class="swatch swatch-pick" title="Custom colour">
+            <input type="color" id="pick" value="#4f6df5" />
+          </label>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn" id="reset">New image</button>
+          <button type="button" class="btn btn-primary" id="download" disabled>Download PNG</button>
+        </div>
+      </div>
+      <p class="note" id="note"></p>
+    </div>
+  </section>
+
+  <section class="copy">
+    <h2>How it works</h2>
+    <ol>
+      <li>Choose a photo. It opens in your browser and is not sent anywhere.</li>
+      <li>
+        The AI model downloads once and is then cached, so later images start straight away.
+      </li>
+      <li>Drag the slider to compare, pick a background colour if you want one, and download.</li>
+    </ol>
+
+    <h2>Questions</h2>
+    <h3>Is it really free?</h3>
+    <p>
+      Yes. The work is done by your own computer, so there is nothing to charge per image and no
+      daily limit.
+    </p>
+    <h3>Is my image uploaded?</h3>
+    <p>No. The image is processed in this browser tab and never leaves your device.</p>
+    <h3>Why is the first image slower?</h3>
+    <p>
+      The AI model has to download the first time. After that it is stored by your browser and
+      loads in a moment.
+    </p>
+  </section>
+
+  <script>
+    import '../tools/bg/ui.ts';
+  </script>
+</Base>

@@ -1,0 +1,42 @@
+---
+import '../styles/global.css';
+import { SITE_NAME } from '../site';
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">
+        <span class="brand-mark" aria-hidden="true"></span>{SITE_NAME}
+      </a>
+      <nav>
+        <a href="/merge-pdf">Merge</a>
+        <a href="/organize-pdf">Organize</a>
+        <a href="/#tools">All tools</a>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p>Your images never leave your device. Everything runs in your browser.</p>
+      <p>© {new Date().getFullYear()} {SITE_NAME}</p>
+    </footer>
+  </body>
+</html>

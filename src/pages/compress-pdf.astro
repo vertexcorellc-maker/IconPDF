@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE_NAME } from '../site';
+---
+
+<Base
+  title={`Compress PDF Free, No Upload | ${SITE_NAME}`}
+  description="Shrink a PDF's file size in your browser for easy sharing. Free, unlimited and private: your file is never uploaded."
+>
+  <section class="tool-head">
+    <h1>Compress PDF</h1>
+    <p class="lede">Make a PDF smaller for email and sharing. Nothing is uploaded.</p>
+  </section>
+
+  <section class="tool" id="cmp-tool" data-state="idle">
+    <label class="drop" id="drop">
+      <input type="file" id="file" accept="application/pdf" hidden />
+      <span class="drop-icon" aria-hidden="true">＋</span>
+      <strong>Choose a PDF</strong>
+      <span>or drag and drop it here</span>
+      <span class="drop-hint">One PDF file</span>
+    </label>
+
+    <div class="stage" id="stage" hidden>
+      <div class="busy" id="busy" hidden>
+        <div class="busy-box"><p id="status">Compressing…</p></div>
+      </div>
+      <p class="info">
+        This works by re-rendering each page as an image, so it shrinks photo-heavy and
+        scanned PDFs the most. Text stays sharp but is no longer selectable in the result.
+      </p>
+      <div class="opt-row">
+        <label class="opt">Compression
+          <select id="level">
+            <option value="strong">Strong (smallest)</option>
+            <option value="balanced" selected>Balanced</option>
+            <option value="light">Light (best quality)</option>
+          </select>
+        </label>
+        <p class="size-read muted" id="size"></p>
+      </div>
+      <div class="controls">
+        <p class="note" id="note"></p>
+        <div class="actions">
+          <button type="button" class="btn" id="reset">New file</button>
+          <button type="button" class="btn btn-primary" id="compress">Compress &amp; download</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="copy">
+    <h2>How it works</h2>
+    <ol>
+      <li>Open a PDF and pick how hard to compress.</li>
+      <li>Click Compress. You'll see the new size before it downloads.</li>
+    </ol>
+  </section>
+
+  <script>
+    import '../tools/compress/ui.ts';
+  </script>
+</Base>

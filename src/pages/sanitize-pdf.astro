@@ -1,0 +1,52 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE_NAME } from '../site';
+---
+
+<Base
+  title={`Sanitize a PDF: Remove JavaScript & Hidden Content Free | ${SITE_NAME}`}
+  description="Strip JavaScript, embedded files and auto-run actions from a PDF in your browser. A safety tool most PDF sites don't offer. Nothing is uploaded."
+>
+  <section class="tool-head">
+    <h1>Sanitize PDF</h1>
+    <p class="lede">
+      Remove JavaScript, embedded files and auto-run actions that can hide in a PDF. Nothing is
+      uploaded.
+    </p>
+  </section>
+
+  <section class="tool" id="san-tool" data-state="idle">
+    <label class="drop" id="drop">
+      <input type="file" id="file" accept="application/pdf" hidden />
+      <span class="drop-icon" aria-hidden="true">＋</span>
+      <strong>Choose a PDF</strong>
+      <span>or drag and drop it here</span>
+      <span class="drop-hint">One PDF file</span>
+    </label>
+
+    <div class="stage" id="stage" hidden>
+      <h2 class="meta-title">Active content found</h2>
+      <ul class="scan-list" id="scan"></ul>
+      <div class="controls">
+        <p class="note" id="note"></p>
+        <div class="actions">
+          <button type="button" class="btn" id="reset">New file</button>
+          <button type="button" class="btn btn-primary" id="sanitize">Remove all &amp; download</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="copy">
+    <h2>Why it matters</h2>
+    <p>
+      PDFs can run JavaScript when opened, carry other files hidden inside them, and trigger actions
+      automatically — all of which have been used to deliver malware. This tool finds and removes
+      them, so the file you open or pass on is just a document. Few online tools offer this.
+    </p>
+  </section>
+
+  <script>
+    import '../tools/sanitize/ui.ts';
+  </script>
+</Base>

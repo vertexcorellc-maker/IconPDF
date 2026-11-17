@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE_NAME } from '../site';
+---
+
+<Base
+  title={`Remove PDF Metadata Free, No Upload | ${SITE_NAME}`}
+  description="Strip hidden metadata — author, software, dates and XMP data — from a PDF before you share it. Runs in your browser; nothing is uploaded."
+>
+  <section class="tool-head">
+    <h1>Clean PDF metadata</h1>
+    <p class="lede">
+      See the hidden data in your PDF and strip it before sharing. Nothing is uploaded.
+    </p>
+  </section>
+
+  <section class="tool" id="meta-tool" data-state="idle">
+    <label class="drop" id="drop">
+      <input type="file" id="file" accept="application/pdf" hidden />
+      <span class="drop-icon" aria-hidden="true">＋</span>
+      <strong>Choose a PDF</strong>
+      <span>or drag and drop it here</span>
+      <span class="drop-hint">One PDF file</span>
+    </label>
+
+    <div class="stage" id="stage" hidden>
+      <h2 class="meta-title">What's hidden in this file</h2>
+      <dl class="meta-list" id="meta"></dl>
+      <div class="controls">
+        <p class="note" id="note"></p>
+        <div class="actions">
+          <button type="button" class="btn" id="reset">New file</button>
+          <button type="button" class="btn btn-primary" id="clean">Remove all &amp; download</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="copy">
+    <h2>Why it matters</h2>
+    <p>
+      PDFs quietly carry the author's name, the software used, timestamps and sometimes XMP data
+      copied from the original photos or documents. This tool shows what's there and removes it, so
+      the file you share gives nothing away. Most online tools don't offer this at all.
+    </p>
+  </section>
+
+  <script>
+    import '../tools/metadata/ui.ts';
+  </script>
+</Base>

@@ -1,0 +1,76 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE_NAME } from '../site';
+---
+
+<Base
+  title={`Add Page Numbers to a PDF Free, No Upload | ${SITE_NAME}`}
+  description="Add page numbers to a PDF in your browser. Choose the position, start number and format. Free, unlimited and private: nothing is uploaded."
+>
+  <section class="tool-head">
+    <h1>Add page numbers</h1>
+    <p class="lede">Number the pages of a PDF, your way. Nothing is uploaded.</p>
+  </section>
+
+  <section class="tool" id="pn-tool" data-state="idle">
+    <label class="drop" id="drop">
+      <input type="file" id="file" accept="application/pdf" hidden />
+      <span class="drop-icon" aria-hidden="true">＋</span>
+      <strong>Choose a PDF</strong>
+      <span>or drag and drop it here</span>
+      <span class="drop-hint">One PDF file</span>
+    </label>
+
+    <div class="stage" id="stage" hidden>
+      <div class="opt-row">
+        <label class="opt">Position
+          <select id="pos">
+            <option value="bc" selected>Bottom centre</option>
+            <option value="br">Bottom right</option>
+            <option value="bl">Bottom left</option>
+            <option value="tc">Top centre</option>
+            <option value="tr">Top right</option>
+            <option value="tl">Top left</option>
+          </select>
+        </label>
+        <label class="opt">Format
+          <select id="fmt">
+            <option value="plain" selected>1</option>
+            <option value="of">1 of N</option>
+            <option value="word">Page 1</option>
+          </select>
+        </label>
+        <label class="opt">Start at
+          <input type="number" id="start" value="1" min="0" style="width:80px" />
+        </label>
+        <label class="opt">Size
+          <select id="size">
+            <option value="10">Small</option>
+            <option value="12" selected>Medium</option>
+            <option value="16">Large</option>
+          </select>
+        </label>
+      </div>
+      <div class="controls">
+        <p class="note" id="note"></p>
+        <div class="actions">
+          <button type="button" class="btn" id="reset">New file</button>
+          <button type="button" class="btn btn-primary" id="apply">Apply &amp; download</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="copy">
+    <h2>How it works</h2>
+    <ol>
+      <li>Open a PDF and choose where the numbers go.</li>
+      <li>Pick a format and a starting number.</li>
+      <li>Click Apply. The numbered PDF downloads straight from your browser.</li>
+    </ol>
+  </section>
+
+  <script>
+    import '../tools/pagenum/ui.ts';
+  </script>
+</Base>

@@ -1,0 +1,70 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE_NAME } from '../site';
+---
+
+<Base
+  title={`JPG to PDF Free, No Upload | ${SITE_NAME}`}
+  description="Convert JPG and PNG images into a PDF, right in your browser. Reorder pages, choose the page size. Free, unlimited and private: nothing is uploaded."
+>
+  <section class="tool-head">
+    <h1>JPG to PDF</h1>
+    <p class="lede">Turn images into a PDF. Drag to reorder, pick a page size. Nothing is uploaded.</p>
+  </section>
+
+  <section class="tool" id="jpg-tool" data-state="idle">
+    <label class="drop" id="drop">
+      <input type="file" id="file" accept="image/jpeg,image/png" multiple hidden />
+      <span class="drop-icon" aria-hidden="true">＋</span>
+      <strong>Choose images</strong>
+      <span>or drag and drop them here</span>
+      <span class="drop-hint">JPG and PNG</span>
+    </label>
+
+    <div class="stage" id="stage" hidden>
+      <div class="file-list" id="list"></div>
+      <label class="add-more" id="addMoreLabel">
+        <input type="file" id="fileMore" accept="image/jpeg,image/png" multiple hidden />
+        ＋ Add more images
+      </label>
+
+      <div class="opt-row">
+        <label class="opt">Page size
+          <select id="size">
+            <option value="fit">Fit to image</option>
+            <option value="a4">A4</option>
+            <option value="letter">Letter</option>
+          </select>
+        </label>
+        <label class="opt" id="marginWrap" hidden>Margin
+          <select id="margin">
+            <option value="0">None</option>
+            <option value="36" selected>Small</option>
+            <option value="72">Large</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="controls">
+        <p class="note" id="note"></p>
+        <div class="actions">
+          <button type="button" class="btn" id="clear">Clear all</button>
+          <button type="button" class="btn btn-primary" id="create">Create PDF</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="copy">
+    <h2>How it works</h2>
+    <ol>
+      <li>Add your JPG or PNG images.</li>
+      <li>Drag to reorder, and choose whether each page fits the image or uses A4/Letter.</li>
+      <li>Click Create PDF. It downloads straight from your browser.</li>
+    </ol>
+  </section>
+
+  <script>
+    import '../tools/jpg/ui.ts';
+  </script>
+</Base>

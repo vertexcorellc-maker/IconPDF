@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE_NAME } from '../site';
+---
+
+<Base
+  title={`Merge PDF Free, No Upload | ${SITE_NAME}`}
+  description="Combine PDF files into one, in any order, right in your browser. Free, unlimited and private: your files are never uploaded."
+>
+  <section class="tool-head">
+    <h1>Merge PDF</h1>
+    <p class="lede">Combine PDFs and images into one file. Drag to reorder. Nothing is uploaded.</p>
+  </section>
+
+  <section class="tool" id="merge-tool" data-state="idle">
+    <label class="drop" id="drop">
+      <input type="file" id="file" accept="application/pdf,image/jpeg,image/png" multiple hidden />
+      <span class="drop-icon" aria-hidden="true">＋</span>
+      <strong>Choose PDF files</strong>
+      <span>or drag and drop them here</span>
+      <span class="drop-hint">PDFs and JPG/PNG images</span>
+    </label>
+
+    <div class="stage" id="stage" hidden>
+      <div class="file-list" id="list"></div>
+
+      <label class="add-more" id="addMore">
+        <input type="file" id="fileMore" accept="application/pdf,image/jpeg,image/png" multiple hidden />
+        ＋ Add more files
+      </label>
+
+      <div class="controls">
+        <p class="note" id="note"></p>
+        <div class="actions">
+          <button type="button" class="btn" id="clear">Clear all</button>
+          <button type="button" class="btn btn-primary" id="merge">Merge &amp; download</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="copy">
+    <h2>How it works</h2>
+    <ol>
+      <li>Add the PDFs (and images) you want to join.</li>
+      <li>Drag the cards to put them in the order you want.</li>
+      <li>Click Merge. The combined PDF downloads straight from your browser.</li>
+    </ol>
+    <h2>Questions</h2>
+    <h3>Are my files uploaded?</h3>
+    <p>No. Merging happens on your own computer; your documents never leave this tab.</p>
+    <h3>Is there a file limit?</h3>
+    <p>No. There's no size cap or daily limit — it's bounded only by your device's memory.</p>
+  </section>
+
+  <script>
+    import '../tools/merge/ui.ts';
+  </script>
+</Base>

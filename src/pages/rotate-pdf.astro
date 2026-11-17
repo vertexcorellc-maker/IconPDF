@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE_NAME } from '../site';
+---
+
+<Base
+  title={`Rotate PDF Free, No Upload | ${SITE_NAME}`}
+  description="Rotate PDF pages in your browser. Turn single pages or the whole document. Free, unlimited and private: nothing is uploaded."
+>
+  <section class="tool-head">
+    <h1>Rotate PDF</h1>
+    <p class="lede">Rotate single pages or the whole document, then save. Nothing is uploaded.</p>
+  </section>
+
+  <section class="tool" id="rot-tool" data-state="idle">
+    <label class="drop" id="drop">
+      <input type="file" id="file" accept="application/pdf" hidden />
+      <span class="drop-icon" aria-hidden="true">＋</span>
+      <strong>Choose a PDF</strong>
+      <span>or drag and drop it here</span>
+      <span class="drop-hint">One PDF file</span>
+    </label>
+
+    <div class="stage" id="stage" hidden>
+      <div class="busy" id="busy" hidden>
+        <div class="busy-box"><p id="status">Loading pages…</p></div>
+      </div>
+      <div class="select-bar">
+        <button type="button" class="btn btn-small" id="allLeft">⟲ Rotate all left</button>
+        <button type="button" class="btn btn-small" id="allRight">⟳ Rotate all right</button>
+      </div>
+      <div class="page-grid" id="grid"></div>
+      <div class="controls">
+        <p class="note" id="note"></p>
+        <div class="actions">
+          <button type="button" class="btn" id="reset">New file</button>
+          <button type="button" class="btn btn-primary" id="apply">Apply &amp; download</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="copy">
+    <h2>How it works</h2>
+    <ol>
+      <li>Open a PDF. Use ⟳ on any page, or rotate the whole document at once.</li>
+      <li>Click Apply. The rotated PDF downloads straight from your browser.</li>
+    </ol>
+  </section>
+
+  <script>
+    import '../tools/rotate/ui.ts';
+  </script>
+</Base>

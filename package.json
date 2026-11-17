@@ -1,0 +1,19 @@
+{
+  "name": "image-tools",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^4.3.2",
+    "astro": "^7.4.12",
+    "fflate": "^0.8.3",
+    "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^4.10.38",
+    "signature_pad": "^5.1.4"
+  }
+}
