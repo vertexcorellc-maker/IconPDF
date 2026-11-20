@@ -1,5 +1,5 @@
 // Working name: change it here and it updates everywhere.
-export const SITE_NAME = 'LocalPDF';
+export const SITE_NAME = 'IconPDF';
 export const SITE_TAGLINE = 'Every PDF tool, right in your browser';
 
 export interface Tool {
