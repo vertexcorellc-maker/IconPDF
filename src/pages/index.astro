@@ -46,12 +46,23 @@ const PICKER_TOOLS = TOOLS.filter((t) => t.ready && TOOL_ACCEPTS[t.slug]).map((t
   tint: GROUP_META[t.group].tint,
   icon: GROUP_META[t.group].icon,
 }));
+
+const FAQS = [
+  { q: 'Is IconPDF free?', a: 'Yes — every tool is completely free and unlimited, with no sign-up and no watermarks.' },
+  { q: 'Are my files uploaded to a server?', a: 'No. Every tool runs entirely in your browser, so your files are processed on your own device and never leave it.' },
+  { q: 'Do I need to create an account?', a: 'No account or sign-up is required. Open a tool and start straight away.' },
+  { q: 'Does it work on my phone?', a: 'Yes. IconPDF works in any modern browser on Windows, macOS, Linux, Android and iOS.' },
+  { q: 'Is there a file size or number limit?', a: 'No. Because everything is processed on your device, there are no upload size limits.' },
+  { q: 'Does IconPDF work offline?', a: 'Once the page has loaded, most tools keep working even without an internet connection.' },
+];
+const toolItems = TOOLS.filter((t) => t.ready);
 ---
 
 <Base
   title={`${SITE_NAME}: Every PDF tool, right in your browser`}
   description="Every PDF tool you need, running entirely in your browser. Merge, organize, convert, edit and secure PDFs with no uploads, no sign-up and no limits."
   bodyClass="home"
+  faq={FAQS}
 >
   <!-- Hero -->
   <section class="hero">
@@ -194,6 +205,37 @@ const PICKER_TOOLS = TOOLS.filter((t) => t.ready && TOOL_ACCEPTS[t.slug]).map((t
     </div>
   </section>
 
+  <!-- FAQ -->
+  <section class="faq">
+    <div class="wrap">
+      <h2>Frequently asked questions</h2>
+      <div class="faq-list">
+        {
+          FAQS.map((f) => (
+            <details class="faq-item">
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      itemListElement: toolItems.map((t, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: t.title,
+        url: `https://iconpdf.com/${t.slug}`,
+      })),
+    })}
+  />
+
   <!-- Drop-first tool picker (opens after a file is dropped on the home screen) -->
   <div class="picker" id="picker" hidden>
     <div class="picker-box" role="dialog" aria-modal="true" aria-labelledby="picker-title">
@@ -258,6 +300,60 @@ const PICKER_TOOLS = TOOLS.filter((t) => t.ready && TOOL_ACCEPTS[t.slug]).map((t
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: #94a3b8;
+    }
+
+    /* FAQ */
+    .faq {
+      background: #fff;
+      border-top: 1px solid #e2e8f0;
+      padding: 60px 0;
+    }
+    .faq h2 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+      color: #0f172a;
+      text-align: center;
+      margin: 0 0 28px;
+    }
+    .faq-list {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .faq-item {
+      border: 1px solid #e8ecf1;
+      border-radius: 12px;
+      background: #fff;
+      padding: 0 18px;
+    }
+    .faq-item summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 16px 0;
+      font-weight: 600;
+      color: #0f172a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after {
+      content: '+';
+      color: #4f6df5;
+      font-size: 1.3rem;
+      font-weight: 400;
+      transition: transform 0.2s ease;
+    }
+    .faq-item[open] summary::after { transform: rotate(45deg); }
+    .faq-item p {
+      margin: -4px 0 16px;
+      color: #475569;
+      font-size: 0.95rem;
+      line-height: 1.6;
     }
 
     /* Picker modal */

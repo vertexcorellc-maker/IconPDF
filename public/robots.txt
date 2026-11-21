@@ -1,0 +1,30 @@
+# IconPDF — https://iconpdf.com
+User-agent: *
+Allow: /
+
+# AI answer engines are welcome to read and cite IconPDF
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+Sitemap: https://iconpdf.com/sitemap-index.xml

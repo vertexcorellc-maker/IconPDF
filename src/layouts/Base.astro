@@ -1,13 +1,80 @@
 ---
 import '../styles/global.css';
-import { SITE_NAME } from '../site';
+import { SITE_NAME, SITE_TAGLINE, TOOLS } from '../site';
 
+interface FaqItem {
+  q: string;
+  a: string;
+}
 interface Props {
   title: string;
   description: string;
   bodyClass?: string;
+  ogImage?: string;
+  faq?: FaqItem[];
 }
-const { title, description, bodyClass } = Astro.props;
+const { title, description, bodyClass, ogImage, faq } = Astro.props;
+
+const site = Astro.site?.origin ?? 'https://iconpdf.com';
+const slug = Astro.url.pathname.replace(/^\/+|\/+$/g, '');
+const canonical = slug ? `${site}/${slug}` : `${site}/`;
+const ogImg = new URL(ogImage ?? '/og.jpg', site).href;
+
+const tool = TOOLS.find((t) => t.slug === slug);
+const appName = tool ? tool.title : SITE_NAME;
+const appDesc = tool ? tool.blurb : description;
+
+// Structured data — auto-derived per page so every tool gets its own schema.
+const schema: Record<string, unknown>[] = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: SITE_NAME,
+    url: `${site}/`,
+    logo: `${site}/favicon.svg`,
+    description: SITE_TAGLINE,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE_NAME,
+    url: `${site}/`,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: appName,
+    url: canonical,
+    applicationCategory: 'UtilityApplication',
+    operatingSystem: 'Any (runs in a web browser)',
+    browserRequirements: 'Requires a modern web browser with JavaScript',
+    isAccessibleForFree: true,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    description: appDesc,
+    provider: { '@type': 'Organization', name: SITE_NAME, url: `${site}/` },
+  },
+];
+if (tool) {
+  schema.push({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${site}/` },
+      { '@type': 'ListItem', position: 2, name: tool.title, item: canonical },
+    ],
+  });
+}
+if (faq && faq.length) {
+  schema.push({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  });
+}
 ---
 
 <!doctype html>
@@ -17,10 +84,18 @@ const { title, description, bodyClass } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:image" content={ogImg} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImg} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,6 +103,7 @@ const { title, description, bodyClass } = Astro.props;
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
       rel="stylesheet"
     />
+    {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
     <script is:inline>
       document.documentElement.classList.add('ready');
     </script>
