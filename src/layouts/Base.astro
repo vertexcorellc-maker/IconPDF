@@ -5,8 +5,9 @@ import { SITE_NAME } from '../site';
 interface Props {
   title: string;
   description: string;
+  bodyClass?: string;
 }
-const { title, description } = Astro.props;
+const { title, description, bodyClass } = Astro.props;
 ---
 
 <!doctype html>
@@ -18,9 +19,20 @@ const { title, description } = Astro.props;
     <meta name="description" content={description} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline>
+      document.documentElement.classList.add('ready');
+    </script>
   </head>
-  <body>
+  <body class={bodyClass}>
     <header class="site-header">
       <a class="brand" href="/">
         <span class="brand-mark" aria-hidden="true"></span>{SITE_NAME}
@@ -35,7 +47,7 @@ const { title, description } = Astro.props;
       <slot />
     </main>
     <footer class="site-footer">
-      <p>Your images never leave your device. Everything runs in your browser.</p>
+      <p>Your files never leave your device. Everything runs in your browser.</p>
       <p>© {new Date().getFullYear()} {SITE_NAME}</p>
     </footer>
   </body>
