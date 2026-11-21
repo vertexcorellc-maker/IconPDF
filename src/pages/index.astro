@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { SITE_NAME, TOOLS, GROUPS } from '../site';
+import { SITE_NAME, TOOLS, GROUPS, TOOL_ACCEPTS } from '../site';
 
 const readyCount = TOOLS.filter((t) => t.ready).length;
 
@@ -36,6 +36,16 @@ const GROUP_META: Record<string, { color: string; tint: string; label: string; i
     icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.94 14.34 12 20l2.06-5.66L20 12l-5.94-2.34L12 4l-2.06 5.66L4 12Z"/></svg>',
   },
 };
+
+// Ready tools that can receive a dropped file, with their icon/colour — powers the drop-first picker.
+const PICKER_TOOLS = TOOLS.filter((t) => t.ready && TOOL_ACCEPTS[t.slug]).map((t) => ({
+  slug: t.slug,
+  title: t.title,
+  accepts: TOOL_ACCEPTS[t.slug],
+  color: GROUP_META[t.group].color,
+  tint: GROUP_META[t.group].tint,
+  icon: GROUP_META[t.group].icon,
+}));
 ---
 
 <Base
@@ -52,6 +62,15 @@ const GROUP_META: Record<string, { color: string; tint: string; label: string; i
         few clicks — everything runs on your device, with nothing to upload.
       </p>
 
+      <div class="dropzone" id="dropzone">
+        <input type="file" id="home-file" accept="application/pdf,image/jpeg,image/png,image/webp" multiple hidden />
+        <svg class="dz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5-5 5 5"/><path d="M12 5v12"/></svg>
+        <strong>Drop a PDF or image to start</strong>
+        <span class="dz-or">or <button type="button" class="dz-browse" id="browse">browse your files</button></span>
+        <span class="dz-hint">We'll show you the tools that fit your file — nothing is uploaded.</span>
+      </div>
+
+      <p class="pills-label">or pick a tool</p>
       <div class="pills" id="pills">
         <button class="pill active" data-cat="all">All tools</button>
         {GROUPS.map((g) => <button class="pill" data-cat={g.toLowerCase()}>{GROUP_META[g].label}</button>)}
@@ -174,6 +193,164 @@ const GROUP_META: Record<string, { color: string; tint: string; label: string; i
       </div>
     </div>
   </section>
+
+  <!-- Drop-first tool picker (opens after a file is dropped on the home screen) -->
+  <div class="picker" id="picker" hidden>
+    <div class="picker-box" role="dialog" aria-modal="true" aria-labelledby="picker-title">
+      <button class="picker-x" id="picker-close" type="button" aria-label="Close">✕</button>
+      <h2 id="picker-title">Choose what to do</h2>
+      <p class="picker-sub" id="picker-sub"></p>
+      <div class="picker-grid" id="picker-grid"></div>
+    </div>
+  </div>
+
+  <script type="application/json" id="tools-json" set:html={JSON.stringify(PICKER_TOOLS)}></script>
+
+  <style>
+    /* Drop-first dropzone */
+    .dropzone {
+      margin: 28px auto 0;
+      max-width: 560px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 34px 24px;
+      border: 2px dashed #cbd5e1;
+      border-radius: 18px;
+      background: #fff;
+      cursor: pointer;
+      transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    }
+    .dropzone:hover,
+    .dropzone.is-over {
+      border-color: #4f6df5;
+      background: #f5f7ff;
+      box-shadow: 0 10px 30px -12px rgba(79, 109, 245, 0.35);
+    }
+    .dz-icon {
+      width: 34px;
+      height: 34px;
+      color: #4f6df5;
+      margin-bottom: 4px;
+    }
+    .dropzone strong {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.12rem;
+      color: #0f172a;
+    }
+    .dz-or { font-size: 0.92rem; color: #64748b; }
+    .dz-browse {
+      font: inherit;
+      font-weight: 600;
+      color: #4f6df5;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .dz-hint { font-size: 0.8rem; color: #94a3b8; margin-top: 2px; }
+    .pills-label {
+      margin: 24px 0 0;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #94a3b8;
+    }
+
+    /* Picker modal */
+    .picker {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(2px);
+    }
+    .picker[hidden] { display: none; }
+    .picker-box {
+      position: relative;
+      width: min(560px, 100%);
+      max-height: 85vh;
+      overflow: auto;
+      background: #fff;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 30px 70px rgba(15, 23, 42, 0.3);
+    }
+    .picker-x {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 8px;
+      background: #f1f5f9;
+      color: #64748b;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+    .picker-x:hover { background: #e2e8f0; color: #0f172a; }
+    .picker-box h2 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #0f172a;
+      margin: 0;
+    }
+    .picker-sub {
+      margin: 6px 0 20px;
+      font-size: 0.9rem;
+      color: #64748b;
+      word-break: break-word;
+    }
+    .picker-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+    }
+    /* Picker cards are injected via innerHTML, so these must be global to apply. */
+    :global(.pk-card) {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      border: 1px solid #e8ecf1;
+      border-radius: 14px;
+      background: #fff;
+      cursor: pointer;
+      text-align: left;
+      transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    :global(.pk-card:hover) {
+      transform: translateY(-2px);
+      border-color: #cbd5e1;
+      box-shadow: 0 10px 24px -10px rgba(15, 23, 42, 0.15);
+    }
+    :global(.pk-tile) {
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: none;
+    }
+    :global(.pk-tile svg) { width: 21px; height: 21px; }
+    :global(.pk-name) {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.98rem;
+      color: #0f172a;
+    }
+  </style>
 
   <style is:global>
     body.home {
@@ -690,6 +867,90 @@ const GROUP_META: Record<string, { color: string; tint: string; label: string; i
   </style>
 
   <script>
+    import { putHandoff } from '../lib/handoff';
+
+    // --- Drop-first flow: drop a file here, pick an applicable tool, open it loaded ---
+    const TOOLS_DATA = JSON.parse(document.getElementById('tools-json')?.textContent || '[]');
+    const dropzone = document.getElementById('dropzone');
+    const homeFile = document.getElementById('home-file') as HTMLInputElement | null;
+    const picker = document.getElementById('picker');
+    const pickerGrid = document.getElementById('picker-grid');
+    const pickerSub = document.getElementById('picker-sub');
+    let droppedFiles: File[] = [];
+
+    const kindOf = (f: File): 'pdf' | 'image' | null =>
+      f.type === 'application/pdf' || /\.pdf$/i.test(f.name)
+        ? 'pdf'
+        : f.type.startsWith('image/') || /\.(jpe?g|png|webp|gif|bmp)$/i.test(f.name)
+          ? 'image'
+          : null;
+
+    function openPicker(files: File[]) {
+      droppedFiles = files;
+      const kind = kindOf(files[0]);
+      const label = files.length === 1 ? files[0].name : `${files.length} files`;
+      if (!kind) {
+        if (pickerSub)
+          pickerSub.textContent =
+            "We can't open that file type yet — IconPDF works with PDFs and images.";
+        if (pickerGrid) pickerGrid.innerHTML = '';
+      } else {
+        const list = TOOLS_DATA.filter((t: any) => t.accepts.includes(kind));
+        if (pickerSub) pickerSub.textContent = `${label} · pick a tool`;
+        if (pickerGrid)
+          pickerGrid.innerHTML = list
+            .map(
+              (t: any) =>
+                `<button class="pk-card" type="button" data-slug="${t.slug}"><span class="pk-tile" style="color:${t.color};background:${t.tint}">${t.icon}</span><span class="pk-name">${t.title}</span></button>`
+            )
+            .join('');
+      }
+      picker?.removeAttribute('hidden');
+    }
+    const closePicker = () => picker?.setAttribute('hidden', '');
+
+    homeFile?.addEventListener('change', () => {
+      if (homeFile.files && homeFile.files.length) openPicker(Array.from(homeFile.files));
+      homeFile.value = '';
+    });
+    document.getElementById('browse')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      homeFile?.click();
+    });
+    dropzone?.addEventListener('click', () => homeFile?.click());
+    ['dragenter', 'dragover'].forEach((t) =>
+      dropzone?.addEventListener(t, (e) => {
+        e.preventDefault();
+        dropzone.classList.add('is-over');
+      })
+    );
+    ['dragleave', 'drop'].forEach((t) =>
+      dropzone?.addEventListener(t, (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('is-over');
+      })
+    );
+    dropzone?.addEventListener('drop', (e) => {
+      const files = (e as DragEvent).dataTransfer?.files;
+      if (files && files.length) openPicker(Array.from(files));
+    });
+    pickerGrid?.addEventListener('click', (e) => {
+      const card = (e.target as HTMLElement).closest('.pk-card') as HTMLElement | null;
+      if (!card || !card.dataset.slug) return;
+      const slug = card.dataset.slug;
+      putHandoff(droppedFiles, slug).then(() => {
+        location.href = '/' + slug;
+      });
+    });
+    document.getElementById('picker-close')?.addEventListener('click', closePicker);
+    picker?.addEventListener('click', (e) => {
+      if (e.target === picker) closePicker();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closePicker();
+    });
+
+    // --- Tool grid filter + search ---
     const grid = document.getElementById('grid');
     const cards = Array.from(document.querySelectorAll<HTMLElement>('.card'));
     const countEl = document.getElementById('count');

@@ -50,5 +50,8 @@ const { title, description, bodyClass } = Astro.props;
       <p>Your files never leave your device. Everything runs in your browser.</p>
       <p>© {new Date().getFullYear()} {SITE_NAME}</p>
     </footer>
+    <script>
+      import '../lib/handoff-hydrate.ts';
+    </script>
   </body>
 </html>

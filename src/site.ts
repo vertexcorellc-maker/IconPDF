@@ -38,3 +38,20 @@ export const TOOLS: Tool[] = [
 ];
 
 export const GROUPS = ['Organize', 'Convert', 'Edit', 'Secure', 'AI'] as const;
+
+// Which dropped file kinds each ready tool can act on — drives the home drop-first picker.
+export const TOOL_ACCEPTS: Record<string, Array<'pdf' | 'image'>> = {
+  'merge-pdf': ['pdf', 'image'],
+  'organize-pdf': ['pdf'],
+  'split-pdf': ['pdf'],
+  'multi-page-layout': ['pdf'],
+  'jpg-to-pdf': ['image'],
+  'pdf-to-jpg': ['pdf'],
+  'compress-pdf': ['pdf'],
+  'rotate-pdf': ['pdf'],
+  'watermark-pdf': ['pdf'],
+  'page-numbers': ['pdf'],
+  'sign-pdf': ['pdf'],
+  'clean-metadata': ['pdf'],
+  'sanitize-pdf': ['pdf'],
+};
