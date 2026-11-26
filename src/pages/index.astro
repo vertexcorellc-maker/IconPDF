@@ -1,33 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
-import { SITE_NAME, TOOLS, GROUPS, TOOL_ACCEPTS } from '../site';
+import { SITE_NAME, TOOLS, TOOL_ACCEPTS, TOOL_ICON } from '../site';
 
-const readyCount = TOOLS.filter((t) => t.ready).length;
+const ready = TOOLS.filter((t) => t.ready);
+const upcoming = TOOLS.filter((t) => !t.ready);
+const FILTERS = ['Organize', 'Convert', 'Edit', 'Secure'] as const;
 
-const GROUP_ICON: Record<string, string> = {
-  Organize:
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.57 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m2 12.5 9.17 4.16a2 2 0 0 0 1.66 0L22 12.5"/><path d="m2 17.5 9.17 4.16a2 2 0 0 0 1.66 0L22 17.5"/></svg>',
-  Convert:
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>',
-  Edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
-  Secure:
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.4-7.66 8.95a1 1 0 0 1-.67 0C7.5 20.4 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1Z"/></svg>',
-  AI: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.94 14.34 12 20l2.06-5.66L20 12l-5.94-2.34L12 4l-2.06 5.66L4 12Z"/></svg>',
-};
-const GROUP_LABEL: Record<string, string> = {
-  Organize: 'Organize',
-  Convert: 'Convert',
-  Edit: 'Edit',
-  Secure: 'Secure',
-  AI: 'AI',
-};
-
-const PICKER_TOOLS = TOOLS.filter((t) => t.ready && TOOL_ACCEPTS[t.slug]).map((t) => ({
-  slug: t.slug,
-  title: t.title,
-  accepts: TOOL_ACCEPTS[t.slug],
-  icon: GROUP_ICON[t.group],
-}));
+const PICKER_TOOLS = ready
+  .filter((t) => TOOL_ACCEPTS[t.slug])
+  .map((t) => ({ slug: t.slug, title: t.title, accepts: TOOL_ACCEPTS[t.slug], icon: TOOL_ICON[t.slug] }));
 
 const FAQS = [
   { q: 'Is IconPDF free?', a: 'Yes — every tool is completely free and unlimited, with no sign-up and no watermarks.' },
@@ -37,7 +18,6 @@ const FAQS = [
   { q: 'Is there a file size or number limit?', a: 'No. Because everything is processed on your device, there are no upload size limits.' },
   { q: 'Does IconPDF work offline?', a: 'Once the page has loaded, most tools keep working even without an internet connection.' },
 ];
-const toolItems = TOOLS.filter((t) => t.ready);
 ---
 
 <Base
@@ -48,77 +28,99 @@ const toolItems = TOOLS.filter((t) => t.ready);
 >
   <!-- Hero -->
   <section class="hero">
-    <div class="hero-inner">
-      <h1>Every PDF tool,<br />right in your browser.</h1>
-      <p class="sub">
-        Free, private and fast. Merge, split, compress, convert and sign your PDFs in a few clicks —
-        nothing is ever uploaded.
-      </p>
+    <h1>Every PDF tool.<br /><span class="h1-dim">Zero uploads.</span></h1>
+    <p class="sub">Merge, split, compress, convert and sign — processed on your device, never on a server.</p>
+    <p class="meta mono">
+      <span>{ready.length} tools</span><span>Free forever</span><span>No sign-up</span><span>Works offline</span>
+    </p>
 
-      <div class="dropzone" id="dropzone">
-        <input type="file" id="home-file" accept="application/pdf,image/jpeg,image/png,image/webp" multiple hidden />
-        <svg class="dz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5-5 5 5"/><path d="M12 5v12"/></svg>
-        <strong>Drop a PDF or image</strong>
-        <span class="dz-or">or <button type="button" class="dz-browse" id="browse">browse files</button></span>
+    <!-- Universal dropzone → suggestion panel -->
+    <div class="dz" id="dropzone" tabindex="0" role="button" aria-label="Drop a PDF or image, or press Enter to browse">
+      <input type="file" id="home-file" accept="application/pdf,image/jpeg,image/png,image/webp" multiple hidden />
+      <div class="dz-idle" id="dz-idle">
+        <span class="dz-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4"/><path d="m7 9 5-5 5 5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+        </span>
+        <span class="dz-text">
+          <strong>Drop any PDF or image here</strong>
+          <span>We'll suggest the right tool — or <button type="button" class="dz-browse" id="browse">browse files</button></span>
+        </span>
+        <span class="dz-chips" aria-hidden="true">
+          <span class="chip">PDF</span><span class="chip">JPG</span><span class="chip">PNG</span><span class="chip">WEBP</span>
+        </span>
       </div>
 
-      <div class="pills" id="pills">
-        <button class="pill active" data-cat="all" type="button">All</button>
-        {GROUPS.map((g) => <button class="pill" data-cat={g.toLowerCase()} type="button">{GROUP_LABEL[g]}</button>)}
+      <div class="dz-suggest" id="dz-suggest" hidden>
+        <div class="sg-files" id="sg-files"></div>
+        <div class="sg-main">
+          <p class="sg-why mono" id="sg-why"></p>
+          <button type="button" class="btn btn-primary sg-primary" id="sg-primary"></button>
+        </div>
+        <div class="sg-more">
+          <span class="sg-label mono">Or open in</span>
+          <div class="sg-pills" id="sg-pills"></div>
+        </div>
+        <button type="button" class="sg-clear" id="sg-clear" aria-label="Clear dropped files">✕</button>
       </div>
     </div>
   </section>
 
-  <!-- Tools -->
-  <section class="tools wrap" id="tools">
-    <div class="grid-head">
-      <span class="count"><b id="count">{readyCount}</b> tools</span>
+  <!-- Command bar + tools -->
+  <section class="tools" id="tools">
+    <div class="cmdbar">
       <div class="search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        <input id="search" type="text" placeholder="Find a tool" autocomplete="off" />
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="search" type="search" placeholder="Search tools — try “shrink” or “metadata”" autocomplete="off" aria-label="Search tools" />
+        <kbd class="kbd mono" id="kbd">⌘K</kbd>
+      </div>
+      <div class="pills" id="pills" role="tablist" aria-label="Filter by category">
+        <button class="pill active" data-cat="all" type="button" role="tab" aria-selected="true">All</button>
+        {FILTERS.map((g) => <button class="pill" data-cat={g.toLowerCase()} type="button" role="tab" aria-selected="false">{g}</button>)}
       </div>
     </div>
 
     <div class="grid" id="grid">
       {
-        TOOLS.map((tool) => {
-          const Tag = tool.ready ? 'a' : 'div';
-          return (
-            <Tag
-              class:list={['card', { soon: !tool.ready }]}
-              href={tool.ready ? `/${tool.slug}` : undefined}
-              data-cat={tool.group.toLowerCase()}
-              data-name={`${tool.title} ${tool.blurb}`.toLowerCase()}
-            >
-              <span class="tile" set:html={GROUP_ICON[tool.group]} />
-              <span class="c-body">
-                <h3>{tool.title}</h3>
-                <p>{tool.blurb}</p>
-              </span>
-              <span class="c-go">{tool.ready ? '→' : 'Soon'}</span>
-            </Tag>
-          );
-        })
+        ready.map((tool) => (
+          <a
+            class="card"
+            href={`/${tool.slug}`}
+            data-cat={tool.group.toLowerCase()}
+            data-name={`${tool.title} ${tool.short} ${tool.blurb} ${tool.keywords ?? ''} ${tool.group}`.toLowerCase()}
+          >
+            <span class="tile" set:html={TOOL_ICON[tool.slug]} />
+            <span class="c-body">
+              <h3>{tool.title}</h3>
+              <p>{tool.short}</p>
+            </span>
+            <span class="c-cat mono">{tool.group}</span>
+          </a>
+        ))
       }
       <div class="empty" id="empty" hidden>
-        <p>No tools match your search.</p>
-        <button id="reset" type="button">Reset</button>
+        <p>No tools match <span class="mono" id="empty-q"></span></p>
+        <button id="reset" type="button">Show all tools</button>
       </div>
     </div>
-  </section>
 
-  <!-- Trust line -->
-  <section class="trust">
-    <div class="wrap trust-row">
-      <span>100% in your browser</span>
-      <span>No uploads</span>
-      <span>No sign-up</span>
-      <span>Works offline</span>
+    <!-- In development (never clickable, so no dead ends) -->
+    <div class="roadmap" aria-label="In development">
+      <span class="rm-label mono"><span class="rm-dot" aria-hidden="true"></span>In development</span>
+      <ul class="rm-list">
+        {
+          upcoming.map((t) => (
+            <li title={t.blurb}>
+              <span class="rm-icon" set:html={TOOL_ICON[t.slug]} />
+              {t.title}
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </section>
 
   <!-- FAQ -->
-  <section class="faq wrap">
+  <section class="faq">
     <h2>Questions</h2>
     <div class="faq-list">
       {
@@ -132,23 +134,13 @@ const toolItems = TOOLS.filter((t) => t.ready);
     </div>
   </section>
 
-  <!-- Drop-first picker -->
-  <div class="picker" id="picker" hidden>
-    <div class="picker-box" role="dialog" aria-modal="true" aria-labelledby="picker-title">
-      <button class="picker-x" id="picker-close" type="button" aria-label="Close">✕</button>
-      <h2 id="picker-title">Choose a tool</h2>
-      <p class="picker-sub" id="picker-sub"></p>
-      <div class="picker-grid" id="picker-grid"></div>
-    </div>
-  </div>
-
   <script type="application/json" id="tools-json" set:html={JSON.stringify(PICKER_TOOLS)}></script>
   <script
     type="application/ld+json"
     set:html={JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'ItemList',
-      itemListElement: toolItems.map((t, i) => ({
+      itemListElement: ready.map((t, i) => ({
         '@type': 'ListItem',
         position: i + 1,
         name: t.title,
@@ -157,186 +149,300 @@ const toolItems = TOOLS.filter((t) => t.ready);
     })}
   />
 
-  <style is:global>
-    body.home { background: #fff; }
-    body.home main { max-width: none; margin: 0; padding: 0 0 80px; }
-  </style>
-
   <style>
-    .wrap {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
     /* Hero */
     .hero {
-      padding: 92px 24px 64px;
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 76px 0 36px;
       text-align: center;
     }
-    .hero-inner { max-width: 680px; margin: 0 auto; }
     h1 {
-      font-size: clamp(2.3rem, 5.5vw, 3.6rem);
-      line-height: 1.06;
-      letter-spacing: -0.035em;
-      font-weight: 800;
-      color: var(--text);
+      font-size: clamp(2.5rem, 6.4vw, 4.3rem);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      font-weight: 700;
       margin: 0;
+    }
+    .h1-dim { color: var(--muted); }
+    .sub {
+      margin: 20px auto 0;
+      max-width: 34rem;
+      font-size: 1.05rem;
+      color: var(--text-2);
       text-wrap: balance;
     }
-    .sub {
-      margin: 22px auto 0;
-      max-width: 36rem;
-      font-size: 1.08rem;
-      line-height: 1.6;
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px 18px;
+      margin: 16px 0 0;
+      font-size: 0.72rem;
       color: var(--muted);
     }
+    .meta span + span::before {
+      content: '•';
+      margin-right: 18px;
+      color: var(--faint);
+    }
 
-    /* Dropzone */
-    .dropzone {
-      margin: 38px auto 0;
-      max-width: 460px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      padding: 32px 24px;
-      border: 1px dashed #cbd5e1;
-      border-radius: var(--radius);
+    /* Universal dropzone */
+    .dz {
+      position: relative;
+      margin-top: 40px;
+      border: 1px dashed var(--line-strong);
+      border-radius: 18px;
+      background: var(--bg-2);
       cursor: pointer;
-      transition: border-color 0.15s ease, background 0.15s ease;
+      text-align: left;
+      transition: border-color 0.2s, background 0.2s, transform 0.4s var(--ease-spring), box-shadow 0.2s;
     }
-    .dropzone:hover,
-    .dropzone.is-over {
+    .dz:hover { border-color: var(--accent-line); }
+    .dz.is-over,
+    :global(body.dragging) .dz {
+      border-style: solid;
       border-color: var(--accent);
-      background: #f8f9ff;
+      background: var(--accent-soft);
+      transform: scale(1.015);
+      box-shadow: 0 0 0 4px var(--accent-soft);
     }
-    .dz-icon { width: 30px; height: 30px; color: var(--accent); }
-    .dropzone strong { font-size: 1.05rem; font-weight: 600; color: var(--text); }
-    .dz-or { font-size: 0.9rem; color: var(--muted); }
+    .dz.has-files { cursor: default; border-style: solid; border-color: var(--line-strong); background: var(--surface); }
+    .dz-idle {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 30px 30px;
+    }
+    .dz-icon {
+      flex: none;
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      border: 1px solid var(--line-strong);
+      background: var(--surface-2);
+      color: var(--text);
+      transition: transform 0.4s var(--ease-spring), color 0.2s;
+    }
+    .dz-icon svg { width: 22px; height: 22px; }
+    .dz.is-over .dz-icon,
+    :global(body.dragging) .dz-icon { transform: translateY(-4px) scale(1.1); color: var(--accent); }
+    .dz-text { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .dz-text strong { font-size: 1.1rem; font-weight: 600; letter-spacing: -0.01em; }
+    .dz-text > span { font-size: 0.9rem; color: var(--muted); }
     .dz-browse {
       font: inherit;
-      color: var(--accent);
+      color: var(--text-2);
       background: none;
       border: none;
       padding: 0;
       cursor: pointer;
       text-decoration: underline;
-      text-underline-offset: 2px;
+      text-decoration-color: var(--line-strong);
+      text-underline-offset: 3px;
     }
+    .dz-browse:hover { color: var(--accent); text-decoration-color: var(--accent); }
+    .dz-chips { display: flex; gap: 6px; flex: none; }
 
-    /* Filter pills */
-    .pills {
+    /* Suggestion panel */
+    .dz-suggest {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px 24px;
+      padding: 24px 56px 24px 24px;
+      animation: rise 0.4s var(--ease-spring);
+    }
+    .sg-files { display: flex; flex-wrap: wrap; gap: 8px; grid-column: 1 / -1; }
+    :global(.sg-file) {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      max-width: 100%;
+      padding: 7px 12px 7px 8px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--bg-2);
+      font-size: 0.88rem;
+    }
+    :global(.sg-file .ext) {
+      padding: 2px 6px;
+      border-radius: 5px;
+      background: var(--surface-3);
+      font-family: var(--mono);
+      font-size: 0.64rem;
+      color: var(--text-2);
+    }
+    :global(.sg-file .nm) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 280px; }
+    :global(.sg-file .sz) { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+    .sg-main { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+    .sg-why { margin: 0; font-size: 0.75rem; color: var(--muted); }
+    .sg-primary { min-height: 46px; padding: 10px 20px; font-size: 0.95rem; }
+    :global(.sg-primary svg) { width: 18px; height: 18px; }
+    .sg-more { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; justify-content: flex-end; }
+    .sg-label { font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .sg-pills { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; max-width: 420px; }
+    :global(.sg-pill) {
+      font: inherit;
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line-strong);
+      background: var(--bg-2);
+      color: var(--text-2);
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    :global(.sg-pill:hover) { border-color: var(--accent); color: var(--text); }
+    .sg-clear {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .sg-clear:hover { color: var(--text); border-color: var(--line-strong); }
+    :global(.sg-error) { grid-column: 1 / -1; margin: 0; color: var(--danger); font-size: 0.9rem; }
+
+    /* Command bar */
+    .tools { padding-top: 40px; scroll-margin-top: 70px; }
+    .cmdbar {
+      position: sticky;
+      top: 58px;
+      z-index: 20;
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 30px;
-    }
-    .pill {
-      font: inherit;
-      font-size: 0.86rem;
-      font-weight: 500;
-      padding: 7px 16px;
-      border-radius: 999px;
-      cursor: pointer;
-      background: #fff;
-      color: var(--muted);
-      border: 1px solid var(--line);
-      transition: all 0.14s ease;
-    }
-    .pill:hover { color: var(--text); border-color: #cbd5e1; }
-    .pill.active { background: var(--text); color: #fff; border-color: var(--text); }
-
-    /* Tool grid */
-    .tools { padding-top: 44px; scroll-margin-top: 70px; }
-    .grid-head {
-      display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 20px;
+      gap: 12px;
+      padding: 12px 0;
+      margin-bottom: 8px;
+      background: var(--glass);
+      backdrop-filter: saturate(160%) blur(16px);
+      -webkit-backdrop-filter: saturate(160%) blur(16px);
     }
-    .count { font-size: 0.9rem; color: var(--muted); }
-    .count b { color: var(--text); font-weight: 600; }
-    .search { position: relative; width: min(240px, 100%); }
+    .search { position: relative; flex: 1 1 320px; max-width: 440px; }
     .search svg {
       position: absolute;
-      left: 11px;
+      left: 13px;
       top: 50%;
       transform: translateY(-50%);
-      width: 15px;
-      height: 15px;
-      color: #94a3b8;
+      width: 16px;
+      height: 16px;
+      color: var(--muted);
+      pointer-events: none;
     }
     .search input {
       width: 100%;
+      height: 42px;
       font: inherit;
       font-size: 0.9rem;
-      padding: 9px 12px 9px 34px;
-      border-radius: 10px;
-      border: 1px solid var(--line);
-      background: #fff;
+      padding: 0 52px 0 38px;
+      border-radius: 11px;
+      border: 1px solid var(--line-strong);
+      background: var(--surface);
       color: var(--text);
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
-    .search input:focus {
-      outline: none;
-      border-color: var(--accent);
+    .search input::placeholder { color: var(--faint); }
+    .search input::-webkit-search-cancel-button { display: none; }
+    .search input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+    .kbd {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 2px 6px;
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      background: var(--surface-2);
+      font-size: 0.68rem;
+      color: var(--muted);
+      pointer-events: none;
     }
+    .pills { display: flex; flex-wrap: wrap; gap: 4px; padding: 3px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface); }
+    .pill {
+      font: inherit;
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 6px 13px;
+      border-radius: 8px;
+      cursor: pointer;
+      background: transparent;
+      color: var(--muted);
+      border: none;
+      transition: color 0.15s, background 0.15s;
+    }
+    .pill:hover { color: var(--text); }
+    .pill.active { background: var(--accent); color: var(--accent-text); }
 
+    /* Tool grid */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(264px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 10px;
     }
     .card {
+      position: relative;
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 14px;
-      padding: 18px;
+      padding: 16px;
       border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #fff;
+      border-radius: 14px;
+      background: var(--surface);
       text-decoration: none;
       color: inherit;
-      transition: border-color 0.15s ease, background 0.15s ease;
+      transition: border-color 0.15s, background 0.15s, transform 0.3s var(--ease-spring);
     }
-    a.card:hover { border-color: #c3ccfb; background: #fbfcff; }
-    .card.soon { opacity: 0.6; }
+    .card:hover { border-color: var(--accent-line); background: var(--surface-2); }
+    .card:active { transform: scale(0.985); }
+    .card.is-first { border-color: var(--accent-line); }
     .tile {
       flex: none;
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      background: #f1f5f9;
-      color: #475569;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.15s ease, color 0.15s ease;
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      border: 1px solid var(--line);
+      background: var(--bg-2);
+      color: var(--text-2);
+      display: inline-grid;
+      place-items: center;
+      transition: color 0.15s, border-color 0.15s;
     }
-    .tile svg { width: 19px; height: 19px; }
-    a.card:hover .tile { background: #eef1ff; color: var(--accent); }
+    .tile :global(svg) { width: 20px; height: 20px; }
+    .card:hover .tile { color: var(--accent); border-color: var(--accent-line); }
     .c-body { flex: 1; min-width: 0; }
-    .c-body h3 { margin: 1px 0 3px; font-size: 1rem; font-weight: 600; color: var(--text); }
-    .c-body p { margin: 0; font-size: 0.86rem; line-height: 1.45; color: var(--muted); }
-    .c-go {
-      flex: none;
-      color: #cbd5e1;
-      font-size: 1rem;
-      transition: transform 0.15s ease, color 0.15s ease;
+    .c-body h3 { margin: 0; font-size: 0.95rem; font-weight: 600; letter-spacing: -0.01em; }
+    .c-body p { margin: 1px 0 0; font-size: 0.82rem; line-height: 1.4; color: var(--muted); }
+    .c-cat {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-size: 0.6rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--faint);
+      opacity: 0;
+      transition: opacity 0.15s;
     }
-    a.card:hover .c-go { color: var(--accent); transform: translateX(2px); }
-    .card.soon .c-go { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
-    .card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .card:hover .c-cat { opacity: 1; }
     .empty {
       grid-column: 1 / -1;
       text-align: center;
-      padding: 44px 20px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
+      padding: 48px 20px;
+      border: 1px dashed var(--line-strong);
+      border-radius: 14px;
       color: var(--muted);
     }
+    .empty p { margin: 0; }
     .empty button {
       margin-top: 8px;
       font: inherit;
@@ -347,43 +453,56 @@ const toolItems = TOOLS.filter((t) => t.ready);
       cursor: pointer;
     }
 
-    /* Trust line */
-    .trust { margin-top: 64px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-    .trust-row {
+    /* Roadmap strip */
+    .roadmap {
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px 28px;
-      padding: 22px 24px;
-      font-size: 0.86rem;
+      align-items: center;
+      gap: 12px 20px;
+      margin-top: 28px;
+      padding: 14px 18px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--bg-2);
+    }
+    .rm-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.66rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
       color: var(--muted);
     }
-    .trust-row span { position: relative; }
-    .trust-row span:not(:last-child)::after {
-      content: '·';
-      position: absolute;
-      right: -16px;
-      color: #cbd5e1;
+    .rm-dot { width: 6px; height: 6px; border-radius: 50%; background: #f5a524; }
+    .rm-list { display: flex; flex-wrap: wrap; gap: 6px 18px; list-style: none; margin: 0; padding: 0; }
+    .rm-list li {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.84rem;
+      color: var(--faint);
+      cursor: default;
     }
+    .rm-icon { display: inline-grid; }
+    .rm-icon :global(svg) { width: 15px; height: 15px; }
 
     /* FAQ */
-    .faq { padding: 64px 24px; }
+    .faq { max-width: 720px; margin: 0 auto; padding: 88px 0 24px; }
     .faq h2 {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 700;
       letter-spacing: -0.02em;
-      color: var(--text);
       text-align: center;
-      margin: 0 0 24px;
+      margin: 0 0 20px;
     }
-    .faq-list { max-width: 680px; margin: 0 auto; }
     .faq-item { border-bottom: 1px solid var(--line); }
     .faq-item summary {
       list-style: none;
       cursor: pointer;
-      padding: 18px 0;
+      padding: 17px 0;
       font-weight: 500;
-      color: var(--text);
+      font-size: 0.95rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -392,103 +511,46 @@ const toolItems = TOOLS.filter((t) => t.ready);
     .faq-item summary::-webkit-details-marker { display: none; }
     .faq-item summary::after {
       content: '+';
-      color: var(--accent);
-      font-size: 1.25rem;
+      color: var(--muted);
+      font-size: 1.2rem;
       font-weight: 400;
-      transition: transform 0.2s ease;
+      transition: transform 0.2s;
     }
-    .faq-item[open] summary::after { transform: rotate(45deg); }
-    .faq-item p {
-      margin: -6px 0 18px;
-      color: var(--muted);
-      font-size: 0.94rem;
-      line-height: 1.6;
-    }
+    .faq-item[open] summary::after { transform: rotate(45deg); color: var(--accent); }
+    .faq-item p { margin: -6px 0 18px; color: var(--muted); font-size: 0.92rem; }
 
-    /* Picker modal */
-    .picker {
-      position: fixed;
-      inset: 0;
-      z-index: 60;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      background: rgba(15, 23, 42, 0.4);
-    }
-    .picker[hidden] { display: none; }
-    .picker-box {
-      position: relative;
-      width: min(540px, 100%);
-      max-height: 85vh;
-      overflow: auto;
-      background: #fff;
-      border-radius: 16px;
-      padding: 28px;
-      border: 1px solid var(--line);
-      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22);
-    }
-    .picker-x {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      width: 30px;
-      height: 30px;
-      border: none;
-      border-radius: 8px;
-      background: #f1f5f9;
-      color: var(--muted);
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-    .picker-x:hover { background: #e2e8f0; color: var(--text); }
-    .picker-box h2 { font-size: 1.25rem; font-weight: 700; color: var(--text); margin: 0; }
-    .picker-sub { margin: 6px 0 20px; font-size: 0.88rem; color: var(--muted); word-break: break-word; }
-    .picker-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-
-    :global(.pk-card) {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      padding: 13px 14px;
-      border: 1px solid var(--line);
-      border-radius: 11px;
-      background: #fff;
-      cursor: pointer;
-      text-align: left;
-      transition: border-color 0.14s ease, background 0.14s ease;
-    }
-    :global(.pk-card:hover) { border-color: #c3ccfb; background: #fbfcff; }
-    :global(.pk-tile) {
-      flex: none;
-      width: 34px;
-      height: 34px;
-      border-radius: 9px;
-      background: #f1f5f9;
-      color: #475569;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-    :global(.pk-tile svg) { width: 17px; height: 17px; }
-    :global(.pk-name) { font-size: 0.92rem; font-weight: 600; color: var(--text); }
-
-    @media (max-width: 520px) {
-      .hero { padding-top: 64px; }
+    @media (max-width: 720px) {
+      .hero { padding-top: 52px; }
+      .dz-idle { flex-direction: column; text-align: center; padding: 34px 20px; }
+      .dz-text { align-items: center; }
+      .dz-suggest { grid-template-columns: 1fr; padding: 20px 20px 22px; }
+      .sg-more { align-items: flex-start; }
+      .sg-pills { justify-content: flex-start; }
+      .sg-main { padding-right: 34px; }
+      .cmdbar { position: static; }
+      .search { max-width: none; }
+      .kbd { display: none; }
     }
   </style>
 
   <script>
     import { putHandoff } from '../lib/handoff';
+    import { fmtBytes } from '../lib/local-stats';
 
-    // --- Drop-first flow ---
-    const TOOLS_DATA = JSON.parse(document.getElementById('tools-json')?.textContent || '[]');
-    const dropzone = document.getElementById('dropzone');
-    const homeFile = document.getElementById('home-file') as HTMLInputElement | null;
-    const picker = document.getElementById('picker');
-    const pickerGrid = document.getElementById('picker-grid');
-    const pickerSub = document.getElementById('picker-sub');
-    let droppedFiles: File[] = [];
+    type ToolInfo = { slug: string; title: string; accepts: Array<'pdf' | 'image'>; icon: string };
+    const TOOLS_DATA: ToolInfo[] = JSON.parse(document.getElementById('tools-json')?.textContent || '[]');
+    const byslug = (s: string) => TOOLS_DATA.find((t) => t.slug === s)!;
+    const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+
+    const dz = $('dropzone');
+    const fileInput = $<HTMLInputElement>('home-file');
+    const idle = $('dz-idle');
+    const suggest = $('dz-suggest');
+    const filesEl = $('sg-files');
+    const whyEl = $('sg-why');
+    const primary = $<HTMLButtonElement>('sg-primary');
+    const pillsEl = $('sg-pills');
+    let dropped: File[] = [];
 
     const kindOf = (f: File): 'pdf' | 'image' | null =>
       f.type === 'application/pdf' || /\.pdf$/i.test(f.name)
@@ -496,109 +558,185 @@ const toolItems = TOOLS.filter((t) => t.ready);
         : f.type.startsWith('image/') || /\.(jpe?g|png|webp|gif|bmp)$/i.test(f.name)
           ? 'image'
           : null;
+    const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 
-    function openPicker(files: File[]) {
-      droppedFiles = files;
-      const kind = kindOf(files[0]);
-      const label = files.length === 1 ? files[0].name : `${files.length} files`;
-      if (!kind) {
-        if (pickerSub)
-          pickerSub.textContent = "We can't open that file type yet — IconPDF works with PDFs and images.";
-        if (pickerGrid) pickerGrid.innerHTML = '';
-      } else {
-        const list = TOOLS_DATA.filter((t: any) => t.accepts.includes(kind));
-        if (pickerSub) pickerSub.textContent = `${label} · pick a tool`;
-        if (pickerGrid)
-          pickerGrid.innerHTML = list
-            .map(
-              (t: any) =>
-                `<button class="pk-card" type="button" data-slug="${t.slug}"><span class="pk-tile">${t.icon}</span><span class="pk-name">${t.title}</span></button>`
-            )
-            .join('');
-      }
-      picker?.removeAttribute('hidden');
+    /** Pick the most likely tool for what was dropped, with a short reason. */
+    function recommend(files: File[]): { slug: string; why: string } | null {
+      const kinds = files.map(kindOf);
+      if (kinds.some((k) => !k)) return null;
+      const pdfs = kinds.filter((k) => k === 'pdf').length;
+      const imgs = kinds.length - pdfs;
+      const total = files.reduce((n, f) => n + f.size, 0);
+      if (pdfs && imgs) return { slug: 'merge-pdf', why: `${pdfs} PDF + ${imgs} image → one document` };
+      if (imgs) return { slug: 'jpg-to-pdf', why: `${imgs} image${imgs > 1 ? 's' : ''} → PDF` };
+      if (pdfs > 1) return { slug: 'merge-pdf', why: `${pdfs} PDFs · ${fmtBytes(total)} total` };
+      if (total > 2 * 1048576) return { slug: 'compress-pdf', why: `Large file · ${fmtBytes(total)} — shrink it` };
+      return { slug: 'organize-pdf', why: `${fmtBytes(total)} · reorder, rotate or delete pages` };
     }
-    const closePicker = () => picker?.setAttribute('hidden', '');
 
-    homeFile?.addEventListener('change', () => {
-      if (homeFile.files && homeFile.files.length) openPicker(Array.from(homeFile.files));
-      homeFile.value = '';
+    function show(files: File[]) {
+      dropped = files;
+      idle.hidden = true;
+      suggest.hidden = false;
+      dz.classList.add('has-files');
+      filesEl.innerHTML = files
+        .slice(0, 6)
+        .map((f) => {
+          const ext = (f.name.split('.').pop() || '?').slice(0, 4).toUpperCase();
+          return `<span class="sg-file"><span class="ext">${esc(ext)}</span><span class="nm" title="${esc(f.name)}">${esc(f.name)}</span><span class="sz">${fmtBytes(f.size)}</span></span>`;
+        })
+        .join('') + (files.length > 6 ? `<span class="sg-file"><span class="sz">+${files.length - 6} more</span></span>` : '');
+
+      const rec = recommend(files);
+      if (!rec) {
+        filesEl.insertAdjacentHTML('beforeend', `<p class="sg-error">That file type isn't supported yet — IconPDF works with PDFs and images.</p>`);
+        primary.parentElement!.hidden = true;
+        pillsEl.parentElement!.hidden = true;
+        return;
+      }
+      primary.parentElement!.hidden = false;
+      pillsEl.parentElement!.hidden = false;
+      const t = byslug(rec.slug);
+      whyEl.textContent = rec.why;
+      primary.innerHTML = `${t.icon}<span>Open in ${esc(t.title)}</span><span aria-hidden="true">→</span>`;
+      primary.dataset.slug = t.slug;
+
+      const kinds = new Set(files.map(kindOf));
+      const others = TOOLS_DATA.filter((x) => x.slug !== t.slug && [...kinds].every((k) => x.accepts.includes(k!)));
+      pillsEl.innerHTML = others
+        .map((x) => `<button type="button" class="sg-pill" data-slug="${x.slug}">${esc(x.title)}</button>`)
+        .join('');
+      pillsEl.parentElement!.hidden = others.length === 0;
+      primary.focus({ preventScroll: true });
+    }
+
+    function reset() {
+      dropped = [];
+      idle.hidden = false;
+      suggest.hidden = true;
+      dz.classList.remove('has-files');
+    }
+
+    async function go(slug: string) {
+      await putHandoff(dropped, slug);
+      location.href = '/' + slug;
+    }
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files?.length) show(Array.from(fileInput.files));
+      fileInput.value = '';
     });
-    document.getElementById('browse')?.addEventListener('click', (e) => {
+    dz.addEventListener('click', (e) => {
+      if (dz.classList.contains('has-files')) return;
+      if ((e.target as HTMLElement).closest('button') && (e.target as HTMLElement).id !== 'browse') return;
+      fileInput.click();
+    });
+    dz.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target === dz && !dz.classList.contains('has-files')) {
+        e.preventDefault();
+        fileInput.click();
+      }
+    });
+    $('browse').addEventListener('click', (e) => {
       e.stopPropagation();
-      homeFile?.click();
+      fileInput.click();
     });
-    dropzone?.addEventListener('click', () => homeFile?.click());
-    ['dragenter', 'dragover'].forEach((t) =>
-      dropzone?.addEventListener(t, (e) => {
-        e.preventDefault();
-        dropzone.classList.add('is-over');
-      })
-    );
-    ['dragleave', 'drop'].forEach((t) =>
-      dropzone?.addEventListener(t, (e) => {
-        e.preventDefault();
-        dropzone.classList.remove('is-over');
-      })
-    );
-    dropzone?.addEventListener('drop', (e) => {
-      const files = (e as DragEvent).dataTransfer?.files;
-      if (files && files.length) openPicker(Array.from(files));
+    primary.addEventListener('click', () => primary.dataset.slug && go(primary.dataset.slug));
+    pillsEl.addEventListener('click', (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLElement>('[data-slug]');
+      if (b) go(b.dataset.slug!);
     });
-    pickerGrid?.addEventListener('click', (e) => {
-      const card = (e.target as HTMLElement).closest('.pk-card') as HTMLElement | null;
-      if (!card || !card.dataset.slug) return;
-      const slug = card.dataset.slug;
-      putHandoff(droppedFiles, slug).then(() => {
-        location.href = '/' + slug;
-      });
-    });
-    document.getElementById('picker-close')?.addEventListener('click', closePicker);
-    picker?.addEventListener('click', (e) => {
-      if (e.target === picker) closePicker();
-    });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closePicker();
+    $('sg-clear').addEventListener('click', (e) => {
+      e.stopPropagation();
+      reset();
     });
 
-    // --- Tool grid filter + search ---
-    const cards = Array.from(document.querySelectorAll<HTMLElement>('.card'));
-    const countEl = document.getElementById('count');
-    const emptyEl = document.getElementById('empty');
-    const searchEl = document.getElementById('search') as HTMLInputElement | null;
-    const pills = Array.from(document.querySelectorAll<HTMLElement>('.pill'));
+    // Magnetic, page-wide drop target: drag a file anywhere on the page.
+    let depth = 0;
+    const hasFiles = (e: DragEvent) => Array.from(e.dataTransfer?.types ?? []).includes('Files');
+    window.addEventListener('dragenter', (e) => {
+      if (!hasFiles(e)) return;
+      e.preventDefault();
+      if (depth++ === 0) {
+        document.body.classList.add('dragging');
+        dz.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+    });
+    window.addEventListener('dragover', (e) => hasFiles(e) && e.preventDefault());
+    window.addEventListener('dragleave', () => {
+      if (--depth <= 0) {
+        depth = 0;
+        document.body.classList.remove('dragging');
+      }
+    });
+    window.addEventListener('drop', (e) => {
+      e.preventDefault();
+      depth = 0;
+      document.body.classList.remove('dragging');
+      const files = e.dataTransfer?.files;
+      if (files?.length) show(Array.from(files));
+    });
+
+    // --- Command-palette style filter ---
+    const cards = Array.from(document.querySelectorAll<HTMLAnchorElement>('.card'));
+    const emptyEl = $('empty');
+    const search = $<HTMLInputElement>('search');
+    const pills = Array.from(document.querySelectorAll<HTMLButtonElement>('.pill'));
+    const isMac = /Mac|iPhone|iPad/.test(navigator.platform);
+    if (!isMac) $('kbd').textContent = 'Ctrl K';
     let cat = 'all';
-    let q = '';
 
     const apply = () => {
-      let shown = 0;
+      const terms = search.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+      let first: HTMLAnchorElement | null = null;
       for (const card of cards) {
-        const okCat = cat === 'all' || card.dataset.cat === cat;
-        const okQ = !q || (card.dataset.name || '').includes(q);
-        const show = okCat && okQ;
+        const name = card.dataset.name || '';
+        const show = (cat === 'all' || card.dataset.cat === cat) && terms.every((t) => name.includes(t));
         card.hidden = !show;
-        if (show) shown++;
+        card.classList.remove('is-first');
+        if (show && !first) first = card;
       }
-      if (countEl) countEl.textContent = String(shown);
-      if (emptyEl) emptyEl.hidden = shown > 0;
+      // While typing, highlight the top match — Enter opens it.
+      if (first && terms.length) first.classList.add('is-first');
+      emptyEl.hidden = !!first;
+      $('empty-q').textContent = terms.length ? `“${search.value.trim()}”` : 'this filter';
+      return first;
     };
 
     pills.forEach((pill) =>
       pill.addEventListener('click', () => {
-        pills.forEach((p) => p.classList.remove('active'));
-        pill.classList.add('active');
+        pills.forEach((p) => {
+          p.classList.toggle('active', p === pill);
+          p.setAttribute('aria-selected', String(p === pill));
+        });
         cat = pill.dataset.cat || 'all';
         apply();
       })
     );
-    searchEl?.addEventListener('input', () => {
-      q = searchEl.value.trim().toLowerCase();
-      apply();
+    search.addEventListener('input', apply);
+    search.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const first = apply();
+        if (first) location.href = first.href;
+      } else if (e.key === 'Escape') {
+        search.value = '';
+        apply();
+        search.blur();
+      }
     });
-    document.getElementById('reset')?.addEventListener('click', () => {
+    document.addEventListener('keydown', (e) => {
+      const typing = (e.target as HTMLElement).matches('input, textarea, select');
+      if (((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') || (e.key === '/' && !typing)) {
+        e.preventDefault();
+        search.focus();
+        search.select();
+      } else if (e.key === 'Escape' && !suggest.hidden) {
+        reset();
+      }
+    });
+    $('reset').addEventListener('click', () => {
       cat = 'all';
-      q = '';
-      if (searchEl) searchEl.value = '';
+      search.value = '';
       pills.forEach((p) => p.classList.toggle('active', p.dataset.cat === 'all'));
       apply();
     });

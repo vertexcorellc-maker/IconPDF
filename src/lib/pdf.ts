@@ -4,6 +4,7 @@ import * as pdfjs from 'pdfjs-dist';
 // Vite's ?worker import gives a real module Worker, which avoids the worker
 // handshake hanging that happens when pdf.js is handed a worker URL string.
 import PdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?worker';
+import { trackLocalInput } from './local-stats';
 
 pdfjs.GlobalWorkerOptions.workerPort = new PdfWorker();
 
@@ -42,7 +43,9 @@ export async function renderThumb(
 }
 
 export async function readFileBytes(file: File): Promise<Uint8Array> {
-  return new Uint8Array(await file.arrayBuffer());
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  trackLocalInput(file.name, file.size, file);
+  return bytes;
 }
 
 export function downloadBytes(bytes: Uint8Array, filename: string) {
@@ -55,6 +58,8 @@ export function downloadBlob(blob: Blob, filename: string) {
   a.download = filename;
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  // Lets the shared result card (lib/result.ts) show metrics + chain actions.
+  window.dispatchEvent(new CustomEvent('iconpdf:result', { detail: { blob, filename } }));
 }
 
 /** Render a full page to an image Blob (for PDF → JPG/PNG). */
