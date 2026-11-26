@@ -28,10 +28,10 @@ const FAQS = [
 >
   <!-- Hero -->
   <section class="hero">
-    <h1>Every PDF tool.<br /><span class="h1-dim">Zero uploads.</span></h1>
-    <p class="sub">Merge, split, compress, convert and sign — processed on your device, never on a server.</p>
+    <h1>Fix any PDF.<br /><span class="h1-dim">Upload nothing.</span></h1>
+    <p class="sub">Merge, compress, sign and convert in seconds. Everything runs right here in your browser, so your files never touch a server.</p>
     <p class="meta mono">
-      <span>{ready.length} tools</span><span>Free forever</span><span>No sign-up</span><span>Works offline</span>
+      <span>{ready.length} tools</span><span>Free, no catch</span><span>No account</span><span>Works offline</span>
     </p>
 
     <!-- Universal dropzone → suggestion panel -->
@@ -42,8 +42,8 @@ const FAQS = [
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4"/><path d="m7 9 5-5 5 5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
         </span>
         <span class="dz-text">
-          <strong>Drop any PDF or image here</strong>
-          <span>We'll suggest the right tool — or <button type="button" class="dz-browse" id="browse">browse files</button></span>
+          <strong>Drop a file. We’ll pick the tool.</strong>
+          <span>PDFs or images, any size — or <button type="button" class="dz-browse" id="browse">browse your files</button></span>
         </span>
         <span class="dz-chips" aria-hidden="true">
           <span class="chip">PDF</span><span class="chip">JPG</span><span class="chip">PNG</span><span class="chip">WEBP</span>
@@ -70,7 +70,7 @@ const FAQS = [
     <div class="cmdbar">
       <div class="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <input id="search" type="search" placeholder="Search tools — try “shrink” or “metadata”" autocomplete="off" aria-label="Search tools" />
+        <input id="search" type="search" placeholder="What do you need to do? Try “shrink” or “sign”" autocomplete="off" aria-label="Search tools" />
         <kbd class="kbd mono" id="kbd">⌘K</kbd>
       </div>
       <div class="pills" id="pills" role="tablist" aria-label="Filter by category">
@@ -105,7 +105,7 @@ const FAQS = [
 
     <!-- In development (never clickable, so no dead ends) -->
     <div class="roadmap" aria-label="In development">
-      <span class="rm-label mono"><span class="rm-dot" aria-hidden="true"></span>In development</span>
+      <span class="rm-label mono"><span class="rm-dot" aria-hidden="true"></span>Coming soon</span>
       <ul class="rm-list">
         {
           upcoming.map((t) => (
@@ -121,7 +121,7 @@ const FAQS = [
 
   <!-- FAQ -->
   <section class="faq">
-    <h2>Questions</h2>
+    <h2>Good questions</h2>
     <div class="faq-list">
       {
         FAQS.map((f) => (

@@ -18,22 +18,22 @@ export interface Tool {
 
 export const TOOLS: Tool[] = [
   // Organize
-  { slug: 'merge-pdf', title: 'Merge PDF', short: 'Combine files into one', keywords: 'join combine append images', blurb: 'Combine files into one, in any order.', group: 'Organize', ready: true },
-  { slug: 'organize-pdf', title: 'Organize PDF', short: 'Reorder, rotate, delete pages', keywords: 'reorder sort delete pages arrange', blurb: 'Reorder, rotate and delete pages visually.', group: 'Organize', ready: true },
-  { slug: 'split-pdf', title: 'Split PDF', short: 'Extract pages or ranges', keywords: 'extract separate pages range cut', blurb: 'Pull out pages or ranges into new files.', group: 'Organize', ready: true },
-  { slug: 'multi-page-layout', title: 'Multi-page layout', short: 'Several pages per sheet', keywords: 'n-up multi page layout print booklet 2-up 4-up', blurb: 'Put 2, 4 or more pages on one sheet.', group: 'Organize', ready: true },
+  { slug: 'merge-pdf', title: 'Merge PDF', short: 'Many files, one PDF', keywords: 'join combine append images', blurb: 'Combine files into one, in any order.', group: 'Organize', ready: true },
+  { slug: 'organize-pdf', title: 'Organize PDF', short: 'Drag pages into order', keywords: 'reorder sort delete pages arrange', blurb: 'Reorder, rotate and delete pages visually.', group: 'Organize', ready: true },
+  { slug: 'split-pdf', title: 'Split PDF', short: 'Pull out just the pages', keywords: 'extract separate pages range cut', blurb: 'Pull out pages or ranges into new files.', group: 'Organize', ready: true },
+  { slug: 'multi-page-layout', title: 'Multi-page layout', short: 'Fit more pages per sheet', keywords: 'n-up multi page layout print booklet 2-up 4-up', blurb: 'Put 2, 4 or more pages on one sheet.', group: 'Organize', ready: true },
   // Convert
-  { slug: 'jpg-to-pdf', title: 'JPG to PDF', short: 'Images into a PDF', keywords: 'image png photo convert', blurb: 'Turn images into a PDF in seconds.', group: 'Convert', ready: true },
-  { slug: 'pdf-to-jpg', title: 'PDF to JPG', short: 'Pages as images', keywords: 'image png export convert', blurb: 'Save each page as an image.', group: 'Convert', ready: true },
-  { slug: 'compress-pdf', title: 'Compress PDF', short: 'Shrink file size', keywords: 'shrink reduce smaller size optimize', blurb: 'Shrink file size for easy sharing.', group: 'Convert', ready: true },
+  { slug: 'jpg-to-pdf', title: 'JPG to PDF', short: 'Photos into one PDF', keywords: 'image png photo convert', blurb: 'Turn images into a PDF in seconds.', group: 'Convert', ready: true },
+  { slug: 'pdf-to-jpg', title: 'PDF to JPG', short: 'Every page as an image', keywords: 'image png export convert', blurb: 'Save each page as an image.', group: 'Convert', ready: true },
+  { slug: 'compress-pdf', title: 'Compress PDF', short: 'Shrink it for email', keywords: 'shrink reduce smaller size optimize', blurb: 'Shrink file size for easy sharing.', group: 'Convert', ready: true },
   // Edit
-  { slug: 'rotate-pdf', title: 'Rotate PDF', short: 'Turn pages upright', keywords: 'turn flip orientation', blurb: 'Turn pages the right way up.', group: 'Edit', ready: true },
-  { slug: 'watermark-pdf', title: 'Watermark', short: 'Stamp text on pages', keywords: 'stamp confidential draft text overlay', blurb: 'Stamp text over every page.', group: 'Edit', ready: true },
-  { slug: 'page-numbers', title: 'Page numbers', short: 'Number every page', keywords: 'number paginate footer header', blurb: 'Add numbers anywhere on the page.', group: 'Edit', ready: true },
+  { slug: 'rotate-pdf', title: 'Rotate PDF', short: 'Flip pages the right way', keywords: 'turn flip orientation', blurb: 'Turn pages the right way up.', group: 'Edit', ready: true },
+  { slug: 'watermark-pdf', title: 'Watermark', short: 'Mark every page as yours', keywords: 'stamp confidential draft text overlay', blurb: 'Stamp text over every page.', group: 'Edit', ready: true },
+  { slug: 'page-numbers', title: 'Page numbers', short: 'Number pages, anywhere', keywords: 'number paginate footer header', blurb: 'Add numbers anywhere on the page.', group: 'Edit', ready: true },
   // Secure
-  { slug: 'sign-pdf', title: 'Sign PDF', short: 'Draw or type signature', keywords: 'signature esign autograph', blurb: 'Draw or type your signature and place it.', group: 'Secure', ready: true },
-  { slug: 'clean-metadata', title: 'Clean metadata', short: 'Strip author and dates', keywords: 'metadata exif author privacy remove properties', blurb: 'Strip author, dates and hidden data before sharing.', group: 'Secure', ready: true },
-  { slug: 'sanitize-pdf', title: 'Sanitize PDF', short: 'Remove scripts and attachments', keywords: 'javascript malware safe strip actions embedded', blurb: 'Strip JavaScript, embedded files and auto-run actions.', group: 'Secure', ready: true },
+  { slug: 'sign-pdf', title: 'Sign PDF', short: 'Sign without printing', keywords: 'signature esign autograph', blurb: 'Draw or type your signature and place it.', group: 'Secure', ready: true },
+  { slug: 'clean-metadata', title: 'Clean metadata', short: 'Erase hidden author details', keywords: 'metadata exif author privacy remove properties', blurb: 'Strip author, dates and hidden data before sharing.', group: 'Secure', ready: true },
+  { slug: 'sanitize-pdf', title: 'Sanitize PDF', short: 'Strip hidden scripts', keywords: 'javascript malware safe strip actions embedded', blurb: 'Strip JavaScript, embedded files and auto-run actions.', group: 'Secure', ready: true },
   { slug: 'protect-pdf', title: 'Protect PDF', short: 'Password-lock a PDF', blurb: 'Lock a PDF with a password.', group: 'Secure', ready: false },
   { slug: 'redact-pdf', title: 'Redact PDF', short: 'Truly remove sensitive text', blurb: 'Truly remove sensitive text, not just cover it.', group: 'Secure', ready: false },
   // AI (credit-based, added later)
