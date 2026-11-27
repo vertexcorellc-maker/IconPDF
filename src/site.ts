@@ -106,7 +106,7 @@ export const TOOL_ICON: Record<string, string> = {
 // Slots without an ID render nothing (no empty boxes, no layout shift).
 // ---------------------------------------------------------------------------
 export const ADSENSE = {
-  client: '' as string,
+  client: 'ca-pub-3454871707751969' as string,
   slots: {
     /** Home: between the tool grid and the FAQ. */
     'home-mid': '',
