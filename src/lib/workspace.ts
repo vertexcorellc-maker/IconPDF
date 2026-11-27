@@ -116,7 +116,14 @@ function buildWorkspace() {
   if (settings.childElementCount) insp.appendChild(settings);
   if (controls) insp.appendChild(controls);
 
-  ws.append(canvas, insp);
+  // Right column: sticky inspector + (desktop-only) ad slot beneath it.
+  const rail = document.createElement('div');
+  rail.className = 'rail';
+  rail.appendChild(insp);
+  const adTpl = document.getElementById('ad-tool-rail') as HTMLTemplateElement | null;
+  if (adTpl) rail.appendChild(adTpl.content.cloneNode(true));
+
+  ws.append(canvas, rail);
   stage.appendChild(ws);
 
   // Tools with nothing to preview (Compress, Page numbers…) get a document preview

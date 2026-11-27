@@ -98,3 +98,25 @@ export const TOOL_ICON: Record<string, string> = {
   'translate-pdf': S('<path d="M4 5h8"/><path d="M8 3v2"/><path d="M5.5 5c.8 3 3 5.5 6 6.5"/><path d="M10.5 5c-.8 3.5-3 6-6 7"/><path d="m13 21 4-9 4 9"/><path d="M14.5 18h5"/>'),
   'summarize-pdf': S('<path d="M4 6h16"/><path d="M4 10h12"/><path d="M4 14h8"/><path d="m16 15 1 2.5 2.5 1-2.5 1L16 22l-1-2.5-2.5-1 2.5-1z"/>'),
 };
+
+// ---------------------------------------------------------------------------
+// Ads (Google AdSense). Everything stays off until `client` is set.
+// 1. Paste your publisher ID, e.g. 'ca-pub-1234567890123456'.
+// 2. Paste each ad unit's slot ID from AdSense → Ads → By ad unit.
+// Slots without an ID render nothing (no empty boxes, no layout shift).
+// ---------------------------------------------------------------------------
+export const ADSENSE = {
+  client: '' as string,
+  slots: {
+    /** Home: between the tool grid and the FAQ. */
+    'home-mid': '',
+    /** Tool pages, desktop only: under the sticky settings panel. */
+    'tool-rail': '',
+    /** Tool pages: between the workspace and the "How it works" copy. */
+    'tool-inline': '',
+    /** Every page: strip above the footer. */
+    'footer': '',
+  } as Record<AdSlotName, string>,
+};
+
+export type AdSlotName = 'home-mid' | 'tool-rail' | 'tool-inline' | 'footer';

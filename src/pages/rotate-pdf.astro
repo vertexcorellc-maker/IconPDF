@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import AdSlot from '../components/AdSlot.astro';
 import { SITE_NAME } from '../site';
 ---
 
@@ -39,6 +40,8 @@ import { SITE_NAME } from '../site';
       </div>
     </div>
   </section>
+
+  <AdSlot name="tool-inline" minHeight={250} />
 
   <section class="copy">
     <h2>How it works</h2>

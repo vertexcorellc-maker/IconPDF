@@ -1,0 +1,33 @@
+---
+// A reserved ad position. Renders an AdSense unit when both the publisher ID and
+// this slot's ID are set in src/site.ts (ADSENSE); otherwise renders an empty,
+// collapsed container so the layout is unaffected.
+import { ADSENSE, type AdSlotName } from '../site';
+
+interface Props {
+  name: AdSlotName;
+  /** Reserved height while the ad loads, to avoid layout shift. */
+  minHeight?: number;
+  format?: 'auto' | 'horizontal' | 'rectangle' | 'vertical';
+}
+const { name, minHeight = 250, format = 'auto' } = Astro.props;
+const slotId = ADSENSE.slots[name];
+const live = Boolean(ADSENSE.client && slotId);
+---
+
+{
+  live ? (
+    <div class="ad-slot" data-ad={name} style={`--ad-min:${minHeight}px`}>
+      <ins
+        class="adsbygoogle"
+        style="display:block"
+        data-ad-client={ADSENSE.client}
+        data-ad-slot={slotId}
+        data-ad-format={format}
+        data-full-width-responsive="true"
+      />
+    </div>
+  ) : (
+    <div class="ad-slot" data-ad={name} style={`--ad-min:${minHeight}px`} />
+  )
+}

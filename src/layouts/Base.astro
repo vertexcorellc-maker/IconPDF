@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
-import { SITE_NAME, SITE_TAGLINE, TOOLS } from '../site';
+import { SITE_NAME, SITE_TAGLINE, TOOLS, ADSENSE } from '../site';
+import AdSlot from '../components/AdSlot.astro';
 
 interface FaqItem {
   q: string;
@@ -120,6 +121,16 @@ if (faq && faq.length) {
       rel="stylesheet"
     />
     {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+    {
+      ADSENSE.client && (
+        <script
+          is:inline
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE.client}`}
+          crossorigin="anonymous"
+        />
+      )
+    }
     <script is:inline>
       document.documentElement.classList.add('ready');
     </script>
@@ -175,7 +186,15 @@ if (faq && faq.length) {
         )
       }
       <slot />
+      <AdSlot name="footer" minHeight={90} format="horizontal" />
     </main>
+    {
+      tool && (
+        <template id="ad-tool-rail">
+          <AdSlot name="tool-rail" minHeight={250} format="rectangle" />
+        </template>
+      )
+    }
     <footer class="site-footer">
       <p>Private by design. Your files never leave this device.</p>
       <p class="mono">© {new Date().getFullYear()} {SITE_NAME} · 100% free &amp; local</p>
@@ -185,6 +204,15 @@ if (faq && faq.length) {
       import '../lib/result.ts';
       import '../lib/handoff-hydrate.ts';
       import { getLocalBytes, fmtBytes } from '../lib/local-stats';
+
+      // Fill every AdSense unit on the page (no-op until ADSENSE.client is set).
+      document.querySelectorAll('ins.adsbygoogle:not([data-adsbygoogle-status])').forEach(() => {
+        try {
+          ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+        } catch {
+          /* blocked by an ad blocker — layout is unaffected */
+        }
+      });
 
       // Theme toggle (persisted).
       document.getElementById('theme-toggle')?.addEventListener('click', () => {

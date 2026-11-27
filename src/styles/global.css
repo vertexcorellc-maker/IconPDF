@@ -267,18 +267,53 @@ main {
   font-size: 0.75rem;
 }
 
-/* Reserved, layout-shift-free monetisation slot. Render a unit inside it;
-   empty slots collapse so they never leave holes in the layout. */
+/* Reserved, layout-shift-free ad slot (see components/AdSlot.astro).
+   Empty slots collapse so they never leave holes in the layout. */
 .ad-slot {
+  position: relative;
   display: block;
-  min-height: 250px;
-  margin: 20px 0;
-  border-radius: var(--radius);
+  min-height: var(--ad-min, 250px);
+  margin: 32px 0;
+  padding-top: 18px;
   overflow: hidden;
+}
+
+.ad-slot::before {
+  content: 'Advertisement';
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
 }
 
 .ad-slot:empty {
   display: none;
+}
+
+/* Rail slot sits under the sticky inspector; never in the mobile bottom sheet. */
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-self: stretch;
+  min-width: 0;
+}
+
+.rail .ad-slot {
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .rail {
+    display: contents;
+  }
+  .rail .ad-slot {
+    display: none;
+  }
 }
 
 /* --------------------------------------------------------------------------

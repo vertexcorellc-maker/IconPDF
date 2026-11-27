@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { SITE_NAME, TOOLS, TOOL_ACCEPTS, TOOL_ICON } from '../site';
+import AdSlot from '../components/AdSlot.astro';
 
 const ready = TOOLS.filter((t) => t.ready);
 const upcoming = TOOLS.filter((t) => !t.ready);
@@ -118,6 +119,8 @@ const FAQS = [
       </ul>
     </div>
   </section>
+
+  <AdSlot name="home-mid" minHeight={250} />
 
   <!-- FAQ -->
   <section class="faq">
