@@ -1690,3 +1690,62 @@ main > .crumb span {
   font-size: 0.72rem;
   white-space: nowrap;
 }
+
+/* Tool page long-form: steps, FAQ, related tools */
+.copy ul,
+.copy ol {
+  padding-left: 1.2rem;
+  margin: 6px 0 0;
+}
+.copy .steps li strong,
+.copy-faq h3 {
+  color: var(--text);
+}
+.copy-faq h3 {
+  margin-top: 20px;
+}
+.copy .related {
+  list-style: none;
+  padding: 0;
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+}
+.copy .related li {
+  margin: 0;
+}
+.copy .related a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  text-decoration: none;
+  transition: border-color 0.15s;
+}
+.copy .related a:hover {
+  border-color: var(--accent);
+}
+.copy .related strong {
+  display: block;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+.related-sub {
+  display: block;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.related-ico {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  color: var(--accent);
+}
+.related-ico svg {
+  width: 100%;
+  height: 100%;
+}

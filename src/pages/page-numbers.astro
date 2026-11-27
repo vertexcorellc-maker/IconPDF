@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import AdSlot from '../components/AdSlot.astro';
+import ToolCopy from '../components/ToolCopy.astro';
 import { SITE_NAME } from '../site';
 ---
 
@@ -64,14 +65,7 @@ import { SITE_NAME } from '../site';
 
   <AdSlot name="tool-inline" minHeight={250} />
 
-  <section class="copy">
-    <h2>How it works</h2>
-    <ol>
-      <li>Open a PDF and choose where the numbers go.</li>
-      <li>Pick a format and a starting number.</li>
-      <li>Click Apply. The numbered PDF downloads straight from your browser.</li>
-    </ol>
-  </section>
+  <ToolCopy />
 
   <script>
     import '../tools/pagenum/ui.ts';

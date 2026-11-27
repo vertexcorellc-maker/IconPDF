@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import AdSlot from '../components/AdSlot.astro';
+import ToolCopy from '../components/ToolCopy.astro';
 import { SITE_NAME } from '../site';
 ---
 
@@ -58,14 +59,7 @@ import { SITE_NAME } from '../site';
 
   <AdSlot name="tool-inline" minHeight={250} />
 
-  <section class="copy">
-    <h2>How it works</h2>
-    <ol>
-      <li>Add your JPG or PNG images.</li>
-      <li>Drag to reorder, and choose whether each page fits the image or uses A4/Letter.</li>
-      <li>Click Create PDF. It downloads straight from your browser.</li>
-    </ol>
-  </section>
+  <ToolCopy />
 
   <script>
     import '../tools/jpg/ui.ts';

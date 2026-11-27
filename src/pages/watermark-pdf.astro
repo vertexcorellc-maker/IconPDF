@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import AdSlot from '../components/AdSlot.astro';
+import ToolCopy from '../components/ToolCopy.astro';
 import { SITE_NAME } from '../site';
 ---
 
@@ -76,14 +77,7 @@ import { SITE_NAME } from '../site';
 
   <AdSlot name="tool-inline" minHeight={250} />
 
-  <section class="copy">
-    <h2>How it works</h2>
-    <ol>
-      <li>Open a PDF and type your watermark text.</li>
-      <li>Set the size, colour, opacity and angle. The preview shows page one.</li>
-      <li>Click Apply. The watermark is added to every page and downloads.</li>
-    </ol>
-  </section>
+  <ToolCopy />
 
   <script>
     import '../tools/watermark/ui.ts';

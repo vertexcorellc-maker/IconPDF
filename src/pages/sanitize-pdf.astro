@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import AdSlot from '../components/AdSlot.astro';
+import ToolCopy from '../components/ToolCopy.astro';
 import { SITE_NAME } from '../site';
 ---
 
@@ -37,14 +38,7 @@ import { SITE_NAME } from '../site';
 
   <AdSlot name="tool-inline" minHeight={250} />
 
-  <section class="copy">
-    <h2>Why it matters</h2>
-    <p>
-      PDFs can run JavaScript when opened, carry other files hidden inside them, and trigger actions
-      automatically — all of which have been used to deliver malware. This tool finds and removes
-      them, so the file you open or pass on is just a document. Few online tools offer this.
-    </p>
-  </section>
+  <ToolCopy />
 
   <script>
     import '../tools/sanitize/ui.ts';

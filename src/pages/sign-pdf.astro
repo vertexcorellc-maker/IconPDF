@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import AdSlot from '../components/AdSlot.astro';
+import ToolCopy from '../components/ToolCopy.astro';
 import { SITE_NAME } from '../site';
 ---
 
@@ -73,14 +74,7 @@ import { SITE_NAME } from '../site';
 
   <AdSlot name="tool-inline" minHeight={250} />
 
-  <section class="copy">
-    <h2>How it works</h2>
-    <ol>
-      <li>Open a PDF and go to the page you want to sign.</li>
-      <li>Draw your signature or type your name, then place it on the page and drag it where you want.</li>
-      <li>Click Apply. The signed PDF downloads straight from your browser.</li>
-    </ol>
-  </section>
+  <ToolCopy />
 
   <script>
     import '../tools/sign/ui.ts';

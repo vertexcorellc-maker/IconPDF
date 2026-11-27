@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import AdSlot from '../components/AdSlot.astro';
+import ToolCopy from '../components/ToolCopy.astro';
 import { SITE_NAME } from '../site';
 ---
 
@@ -46,13 +47,7 @@ import { SITE_NAME } from '../site';
 
   <AdSlot name="tool-inline" minHeight={250} />
 
-  <section class="copy">
-    <h2>How it works</h2>
-    <ol>
-      <li>Open a PDF and choose how many pages go on each sheet.</li>
-      <li>Click Create. Pages are arranged on A4 sheets and the new PDF downloads.</li>
-    </ol>
-  </section>
+  <ToolCopy />
 
   <script>
     import '../tools/nup/ui.ts';

@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import AdSlot from '../components/AdSlot.astro';
+import ToolCopy from '../components/ToolCopy.astro';
 import { SITE_NAME } from '../site';
 ---
 
@@ -54,14 +55,7 @@ import { SITE_NAME } from '../site';
 
   <AdSlot name="tool-inline" minHeight={250} />
 
-  <section class="copy">
-    <h2>How it works</h2>
-    <ol>
-      <li>Open a PDF. Every page is shown as a preview.</li>
-      <li>Choose JPG or PNG and the quality.</li>
-      <li>Click Download. A single page saves as an image; several pages save as a ZIP.</li>
-    </ol>
-  </section>
+  <ToolCopy />
 
   <script>
     import '../tools/pdftojpg/ui.ts';

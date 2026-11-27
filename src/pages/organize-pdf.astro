@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import AdSlot from '../components/AdSlot.astro';
+import ToolCopy from '../components/ToolCopy.astro';
 import { SITE_NAME } from '../site';
 ---
 
@@ -39,17 +40,7 @@ import { SITE_NAME } from '../site';
 
   <AdSlot name="tool-inline" minHeight={250} />
 
-  <section class="copy">
-    <h2>How it works</h2>
-    <ol>
-      <li>Open a PDF. Every page appears as a thumbnail.</li>
-      <li>Drag pages to reorder, use ⟳ to rotate, or ✕ to delete.</li>
-      <li>Click Apply. The new PDF downloads straight from your browser.</li>
-    </ol>
-    <h2>Questions</h2>
-    <h3>Is my file uploaded?</h3>
-    <p>No. The PDF is opened and rebuilt on your own computer; it never leaves this tab.</p>
-  </section>
+  <ToolCopy />
 
   <script>
     import '../tools/organize/ui.ts';

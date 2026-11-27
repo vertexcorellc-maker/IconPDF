@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import AdSlot from '../components/AdSlot.astro';
+import ToolCopy from '../components/ToolCopy.astro';
 import { SITE_NAME } from '../site';
 ---
 
@@ -45,14 +46,7 @@ import { SITE_NAME } from '../site';
 
   <AdSlot name="tool-inline" minHeight={250} />
 
-  <section class="copy">
-    <h2>How it works</h2>
-    <ol>
-      <li>Open a PDF. Click pages to select or deselect them.</li>
-      <li><strong>Extract</strong> puts the selected pages into one new PDF.</li>
-      <li><strong>Separate files</strong> saves each selected page as its own PDF in a ZIP.</li>
-    </ol>
-  </section>
+  <ToolCopy />
 
   <script>
     import '../tools/split/ui.ts';

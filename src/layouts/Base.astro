@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { SITE_NAME, SITE_TAGLINE, TOOLS, ADSENSE } from '../site';
 import AdSlot from '../components/AdSlot.astro';
+import { TOOL_CONTENT } from '../tool-content';
 
 interface FaqItem {
   q: string;
@@ -13,8 +14,10 @@ interface Props {
   bodyClass?: string;
   ogImage?: string;
   faq?: FaqItem[];
+  /** Keep the page out of search results (e.g. a tool that is temporarily broken). */
+  noindex?: boolean;
 }
-const { title, description, bodyClass, ogImage, faq } = Astro.props;
+const { title, description, bodyClass, ogImage, faq, noindex } = Astro.props;
 
 const site = Astro.site?.origin ?? 'https://iconpdf.com';
 const slug = Astro.url.pathname.replace(/^\/+|\/+$/g, '');
@@ -65,7 +68,28 @@ if (tool) {
     ],
   });
 }
-if (faq && faq.length) {
+// Tool pages: HowTo + FAQPage from the same data ToolCopy renders visibly.
+const content = tool ? TOOL_CONTENT[tool.slug] : undefined;
+if (content) {
+  schema.push({
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: `How to ${content.howTo}`,
+    totalTime: 'PT1M',
+    estimatedCost: { '@type': 'MonetaryAmount', currency: 'USD', value: '0' },
+    tool: { '@type': 'HowToTool', name: `${SITE_NAME} ${tool!.title} (web browser)` },
+    step: content.steps.map((s, i) => ({
+      '@type': 'HowToStep',
+      position: i + 1,
+      name: s.name,
+      text: s.text,
+      url: `${canonical}#how-to`,
+    })),
+  });
+}
+const faqItems = faq && faq.length ? faq : content?.faq;
+if (faqItems && faqItems.length) {
+  const faq = faqItems;
   schema.push({
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -101,7 +125,7 @@ if (faq && faq.length) {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />

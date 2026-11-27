@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import AdSlot from '../components/AdSlot.astro';
+import ToolCopy from '../components/ToolCopy.astro';
 import { SITE_NAME } from '../site';
 ---
 
@@ -42,19 +43,7 @@ import { SITE_NAME } from '../site';
 
   <AdSlot name="tool-inline" minHeight={250} />
 
-  <section class="copy">
-    <h2>How it works</h2>
-    <ol>
-      <li>Add the PDFs (and images) you want to join.</li>
-      <li>Drag the cards to put them in the order you want.</li>
-      <li>Click Merge. The combined PDF downloads straight from your browser.</li>
-    </ol>
-    <h2>Questions</h2>
-    <h3>Are my files uploaded?</h3>
-    <p>No. Merging happens on your own computer; your documents never leave this tab.</p>
-    <h3>Is there a file limit?</h3>
-    <p>No. There's no size cap or daily limit — it's bounded only by your device's memory.</p>
-  </section>
+  <ToolCopy />
 
   <script>
     import '../tools/merge/ui.ts';

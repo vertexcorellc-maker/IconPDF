@@ -1,0 +1,56 @@
+---
+// Long-form content under each tool: steps, explainer sections, FAQ and related tools.
+// Data lives in src/tool-content.ts; Base.astro emits the matching HowTo + FAQPage schema.
+import { TOOLS, TOOL_ICON } from '../site';
+import { TOOL_CONTENT } from '../tool-content';
+
+const slug = Astro.url.pathname.replace(/^\/+|\/+$/g, '');
+const c = TOOL_CONTENT[slug];
+const tool = TOOLS.find((t) => t.slug === slug);
+const related = c ? c.related.map((s) => TOOLS.find((t) => t.slug === s)).filter((t) => t && t.ready) : [];
+---
+
+{c && tool && (
+  <section class="copy">
+    <h2 id="how-to">How to {c.howTo}</h2>
+    <ol class="steps">
+      {c.steps.map((s) => (
+        <li><strong>{s.name}.</strong> {s.text}</li>
+      ))}
+    </ol>
+
+    {c.sections.map((s) => (
+      <>
+        <h2>{s.h}</h2>
+        {s.p?.map((p) => <p>{p}</p>)}
+        {s.list && <ul>{s.list.map((li) => <li>{li}</li>)}</ul>}
+      </>
+    ))}
+
+    <h2>{tool.title}: frequently asked questions</h2>
+    <div class="copy-faq">
+      {c.faq.map((f) => (
+        <>
+          <h3>{f.q}</h3>
+          <p>{f.a}</p>
+        </>
+      ))}
+    </div>
+
+    {related.length > 0 && (
+      <>
+        <h2>Related tools</h2>
+        <ul class="related">
+          {related.map((t) => (
+            <li>
+              <a href={`/${t!.slug}`}>
+                <span class="related-ico" set:html={TOOL_ICON[t!.slug]} />
+                <span><strong>{t!.title}</strong><span class="related-sub">{t!.short}</span></span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </>
+    )}
+  </section>
+)}
