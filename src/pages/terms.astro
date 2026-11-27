@@ -1,0 +1,190 @@
+---
+import LegalPage from '../components/LegalPage.astro';
+import { LEGAL, SITE_NAME } from '../site';
+const L = LEGAL;
+---
+
+<LegalPage
+  title="Terms of Service"
+  heading="Terms of Service"
+  description={`The terms that govern your use of ${SITE_NAME}, the free in-browser PDF toolkit operated by ${LEGAL.entity}.`}
+  summary="Please read these terms carefully. By using IconPDF you agree to them. They include a disclaimer of warranties, a limitation of our liability and a requirement that disputes are resolved under New Mexico law."
+>
+  <h2 id="agreement">1. Agreement to these terms</h2>
+  <p>
+    These Terms of Service ("Terms") are a legal agreement between you and {L.entity},
+    {L.entityType} ("we", "us", "our"), governing your access to and use of the {SITE_NAME} website
+    at iconpdf.com and its tools (the "Service"). By accessing or using the Service, you agree to
+    these Terms and to our <a href="/privacy">Privacy Policy</a>. If you do not agree, do not use the
+    Service. If you use the Service on behalf of an organisation, you confirm you are authorised to
+    accept these Terms for it.
+  </p>
+
+  <h2 id="service">2. The Service</h2>
+  <p>
+    {SITE_NAME} provides free tools for working with PDF files and images, such as merging,
+    splitting, compressing, converting, rotating, watermarking, numbering, signing and cleaning
+    documents. The tools run locally in your web browser: your files are processed on your own
+    device and are not uploaded to us. The Service is free, does not require an account and is
+    supported by advertising.
+  </p>
+  <p>
+    We may add, change, suspend or remove any tool or feature, or the Service as a whole, at any time
+    and without notice. Features labelled "coming soon", "in development" or similar are not
+    available and may never be released.
+  </p>
+
+  <h2 id="eligibility">3. Eligibility</h2>
+  <p>
+    You must be at least 13 years old (or the minimum age of digital consent in your country, if
+    higher) to use the Service. If you are under 18, you may use the Service only with the
+    involvement of a parent or guardian.
+  </p>
+
+  <h2 id="license">4. Your licence to use the Service</h2>
+  <p>
+    Subject to these Terms, we grant you a personal, worldwide, royalty-free, non-exclusive,
+    non-transferable and revocable licence to use the Service for any lawful personal or commercial
+    purpose. You may use the documents you create with the Service however you like, subject to the
+    rights of others in their content.
+  </p>
+
+  <h2 id="your-content">5. Your files and content</h2>
+  <ul>
+    <li><strong>You keep ownership.</strong> We claim no rights in the files you process ("Your Content"). Because processing happens on your device, we do not receive, store or have access to Your Content.</li>
+    <li><strong>You are responsible for Your Content.</strong> You confirm you own Your Content or have every right, licence and permission needed to open, modify, convert, sign and distribute it.</li>
+    <li><strong>Keep backups.</strong> Always keep your original files. The Service creates new files and does not change your originals, but we cannot recover anything for you if a result is lost, corrupted or not what you expected.</li>
+    <li><strong>Check the results.</strong> You are responsible for reviewing every output before relying on, sending or filing it, including checking that pages, text, signatures, redactions and metadata are as you intend.</li>
+  </ul>
+
+  <h2 id="acceptable-use">6. Acceptable use</h2>
+  <p>You agree not to use the Service to:</p>
+  <ul>
+    <li>break any law or regulation, or infringe anyone's intellectual property, privacy or other rights;</li>
+    <li>create, alter or sign documents in order to commit fraud or forgery, impersonate any person, or mislead anyone about who signed or approved a document;</li>
+    <li>process content that is unlawful, including child sexual abuse material;</li>
+    <li>remove, bypass or defeat digital rights management, passwords or other protections on documents you are not authorised to unlock;</li>
+    <li>interfere with or disrupt the Service, attempt to gain unauthorised access to it, or introduce malware;</li>
+    <li>use bots, scrapers or automated means to access the Service in a way that places an unreasonable load on it, or to circumvent advertising or other technical measures;</li>
+    <li>copy, frame or resell the Service, or present it as your own, without our written permission.</li>
+  </ul>
+  <p>We may restrict or block access to the Service for anyone we reasonably believe has breached these Terms.</p>
+
+  <h2 id="features">7. Notes on specific tools</h2>
+  <ul>
+    <li><strong>Electronic signatures.</strong> The Sign tool places an image of a drawn or typed signature on a PDF. It does not create a certificate-based digital signature, verify anyone's identity or provide an audit trail. Whether such a signature is legally valid depends on the law that applies to your document. You are solely responsible for deciding whether it is appropriate, and for having the authority to sign.</li>
+    <li><strong>Sanitize and metadata tools.</strong> These remove specific types of content described on each tool's page. They are not antivirus software and do not guarantee that a file is free of malware or of all identifying information.</li>
+    <li><strong>Compression and conversion.</strong> Some tools re-render pages as images, which can reduce quality or make text unselectable. Results vary by file.</li>
+    <li><strong>AI features.</strong> Tools that use machine-learning models (such as Remove Background) may produce inaccurate or unexpected results.</li>
+  </ul>
+
+  <h2 id="ip">8. Our intellectual property</h2>
+  <p>
+    The Service, including its software, design, text, graphics, logos and the {SITE_NAME} name, is
+    owned by {L.entity} or its licensors and is protected by copyright, trademark and other laws.
+    Except for the licence in section 4, no rights are granted to you. The Service includes
+    open-source software, which is licensed under its own terms; nothing in these Terms limits your
+    rights under those licences.
+  </p>
+
+  <h2 id="feedback">9. Feedback</h2>
+  <p>
+    If you send us suggestions or feedback, you agree we may use them freely without any obligation
+    to you.
+  </p>
+
+  <h2 id="third-parties">10. Advertising and third-party services</h2>
+  <p>
+    The Service displays advertising provided by third parties, such as Google AdSense, and may
+    link to third-party websites. We do not control and are not responsible for third-party ads,
+    products, websites or services, and your dealings with them are solely between you and that
+    third party. Third-party services are governed by their own terms and privacy policies.
+  </p>
+
+  <h2 id="copyright">11. Copyright complaints (DMCA)</h2>
+  <p>
+    We respect intellectual property rights. Because we do not host user files, content processed
+    with the tools is not stored on our servers. If you believe material on iconpdf.com itself
+    infringes your copyright, send a notice to <a href={`mailto:${L.email}`}>{L.email}</a> including:
+    your physical or electronic signature; identification of the copyrighted work; identification
+    and location (URL) of the material you claim is infringing; your contact details; a statement
+    that you have a good-faith belief the use is not authorised by the owner, its agent or the law;
+    and a statement, under penalty of perjury, that the information is accurate and that you are the
+    owner or authorised to act on the owner's behalf.
+  </p>
+
+  <h2 id="disclaimer">12. Disclaimer of warranties</h2>
+  <p class="legal-caps">
+    The Service is provided "as is" and "as available", without warranties of any kind, whether
+    express, implied or statutory, including implied warranties of merchantability, fitness for a
+    particular purpose, title, non-infringement and accuracy, and any warranties arising from course
+    of dealing or usage of trade. We do not warrant that the Service will be uninterrupted, secure or
+    error-free, that results will be accurate, complete or reliable, that any file will be processed
+    correctly or remain uncorrupted, or that defects will be corrected. You use the Service and rely
+    on its results at your own risk.
+  </p>
+
+  <h2 id="liability">13. Limitation of liability</h2>
+  <p class="legal-caps">
+    To the fullest extent permitted by law, {L.entity} and its members, managers, employees, agents,
+    licensors and service providers will not be liable for any indirect, incidental, special,
+    consequential, exemplary or punitive damages, or for any loss of data, documents, profits,
+    revenue, business, goodwill or opportunity, arising out of or relating to these Terms or your
+    use of or inability to use the Service, however caused and under any theory of liability, even
+    if we have been advised of the possibility of such damages. Our total liability for all claims
+    arising out of or relating to these Terms or the Service will not exceed one hundred US dollars
+    (US$100).
+  </p>
+  <p>
+    Some jurisdictions do not allow certain warranties to be excluded or liability to be limited, so
+    some of the above may not apply to you. Nothing in these Terms excludes or limits liability that
+    cannot be excluded or limited by law, or affects your statutory rights as a consumer.
+  </p>
+
+  <h2 id="indemnity">14. Indemnity</h2>
+  <p>
+    To the extent permitted by law, you agree to defend, indemnify and hold harmless {L.entity} and
+    its members, managers, employees and agents from any claims, liabilities, damages, losses and
+    expenses (including reasonable legal fees) arising out of or relating to Your Content, your
+    breach of these Terms or your violation of any law or the rights of a third party.
+  </p>
+
+  <h2 id="law">15. Governing law and disputes</h2>
+  <p>
+    These Terms and any dispute arising out of or relating to them or the Service are governed by
+    the laws of the State of {L.state}, United States, without regard to its conflict-of-laws rules.
+    Before filing a claim, you agree to contact us at <a href={`mailto:${L.email}`}>{L.email}</a> and
+    try to resolve the dispute informally for at least 30 days. If it is not resolved, it will be
+    brought exclusively in {L.venue}, and you and we consent to personal jurisdiction there. Either
+    party may bring an individual claim in small-claims court where it qualifies. To the extent
+    permitted by law, claims must be brought individually and not as a plaintiff or class member in
+    any class or representative proceeding. If you are a consumer living outside the United States,
+    you may also have the benefit of mandatory protections and the right to bring proceedings in the
+    courts of your country of residence.
+  </p>
+
+  <h2 id="changes">16. Changes to these Terms</h2>
+  <p>
+    We may update these Terms from time to time. The "Last updated" date shows when they last
+    changed. If a change is material, we will give reasonable notice on the Service. By continuing to
+    use the Service after changes take effect, you agree to the updated Terms.
+  </p>
+
+  <h2 id="general">17. General</h2>
+  <p>
+    These Terms, together with the Privacy Policy and Cookie Policy, are the entire agreement between
+    you and us about the Service. If any provision is found unenforceable, it will be limited to the
+    minimum extent necessary and the rest will remain in effect. Our failure to enforce a provision is
+    not a waiver. You may not assign these Terms without our consent; we may assign them in
+    connection with a merger, acquisition or sale of assets. Sections that by their nature should
+    survive termination (including 5, 8 and 11 to 17) will survive. We may terminate or suspend your
+    access to the Service at any time.
+  </p>
+
+  <h2 id="contact">18. Contact</h2>
+  <address>
+    {L.entity}<br />
+    {L.address.map((line) => (<>{line}<br /></>))}
+    Email: <a href={`mailto:${L.email}`}>{L.email}</a>
+  </address>
+</LegalPage>

@@ -1,0 +1,40 @@
+---
+// Shared shell for /privacy, /terms, /cookies and /about: title, date, readable prose column.
+import Base from '../layouts/Base.astro';
+import { LEGAL, SITE_NAME } from '../site';
+
+interface Props {
+  title: string;
+  heading: string;
+  description: string;
+  summary?: string;
+  showUpdated?: boolean;
+}
+const { title, heading, description, summary, showUpdated = true } = Astro.props;
+const here = Astro.url.pathname.replace(/\/+$/, '');
+const links = [
+  { href: '/privacy', label: 'Privacy Policy' },
+  { href: '/terms', label: 'Terms of Service' },
+  { href: '/cookies', label: 'Cookie Policy' },
+  { href: '/about', label: 'About & Contact' },
+];
+---
+
+<Base title={`${title} | ${SITE_NAME}`} description={description}>
+  <article class="legal">
+    <header class="legal-head">
+      <p class="legal-eyebrow mono">Legal</p>
+      <h1>{heading}</h1>
+      {showUpdated && <p class="legal-date mono">Last updated: {LEGAL.updated}</p>}
+      {summary && <p class="legal-summary">{summary}</p>}
+    </header>
+    <nav class="legal-nav" aria-label="Legal pages">
+      {links.map((l) => (
+        <a href={l.href} aria-current={here === l.href ? 'page' : undefined}>{l.label}</a>
+      ))}
+    </nav>
+    <div class="legal-body">
+      <slot />
+    </div>
+  </article>
+</Base>

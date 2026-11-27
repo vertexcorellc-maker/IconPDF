@@ -1,0 +1,83 @@
+---
+import LegalPage from '../components/LegalPage.astro';
+import { LEGAL, SITE_NAME } from '../site';
+
+const own = [
+  ['iconpdf-theme', 'Local storage', 'Remembers whether you chose the light or dark theme.', 'Until you clear it'],
+  ['iconpdf-local-bytes', 'Session storage', 'Counts how much data you processed locally, for the "processed" figure in the header. Never sent anywhere.', 'Until you close the tab'],
+  ['iconpdf-handoff / iconpdf-handoff-target', 'IndexedDB / session storage', 'Passes your file from one tool to the next when you use "Chain to another tool" or the home page drop zone. Deleted once the next tool loads it.', 'Seconds; until you close the tab'],
+  ['bg-force-cpu', 'Session storage', 'Remembers if Remove Background had to fall back to your processor instead of the graphics card.', 'Until you close the tab'],
+  ['AI model cache', 'Cache storage', 'Stores the Remove Background AI model after the first download so it loads instantly next time.', 'Until you clear site data'],
+];
+const third = [
+  ['Google Analytics', '_ga, _ga_*', 'Analytics: distinguishes visitors and sessions so we can see how the site is used.', 'Up to 2 years', 'https://policies.google.com/privacy'],
+  ['Google Tag Manager', '(no cookie of its own)', 'Loads and manages the analytics and advertising tags.', 'n/a', 'https://policies.google.com/privacy'],
+  ['Google AdSense / DoubleClick', '__gads, __gpi, __eoi, IDE, test_cookie and similar', 'Advertising: serves and measures ads, limits repeats, prevents fraud and, with consent where required, personalises ads.', 'Up to 13 months', 'https://policies.google.com/technologies/ads'],
+  ['Google consent tools', 'FCCDCF, FCNEC and similar', 'Stores your cookie consent choices (EEA, UK and Switzerland).', 'Up to 13 months', 'https://policies.google.com/privacy'],
+  ['Cloudflare', '__cf_bm, cf_clearance (only if triggered)', 'Security: detects bots and protects the site from abuse.', '30 minutes to 1 year', 'https://www.cloudflare.com/privacypolicy/'],
+];
+---
+
+<LegalPage
+  title="Cookie Policy"
+  heading="Cookie Policy"
+  description={`The cookies and browser storage ${SITE_NAME} and its partners use, what each one does and how to control them.`}
+  summary="Your files are never stored in cookies or uploaded. IconPDF itself only stores a few small preferences on your device. Our analytics and advertising partners use cookies, which you can control."
+>
+  <h2 id="what">1. What cookies and browser storage are</h2>
+  <p>
+    Cookies are small text files a website stores in your browser. Websites can also use similar
+    technologies such as local storage, session storage, IndexedDB and cache storage. In this policy,
+    "cookies" covers all of them. Some are "strictly necessary" for a feature you ask for; others are
+    used for analytics or advertising.
+  </p>
+
+  <h2 id="ours">2. Storage {SITE_NAME} sets</h2>
+  <p>
+    These items stay in your browser and are never sent to our servers. They are strictly necessary
+    for features you use or remember a preference you chose, so they do not require consent.
+  </p>
+  <div class="legal-table-wrap">
+    <table class="legal-table">
+      <thead><tr><th>Name</th><th>Type</th><th>Purpose</th><th>Duration</th></tr></thead>
+      <tbody>
+        {own.map(([n, t, p, d]) => (<tr><td class="mono">{n}</td><td>{t}</td><td>{p}</td><td>{d}</td></tr>))}
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="third">3. Third-party cookies</h2>
+  <p>
+    Our partners set the cookies below. Names and durations are set by the providers and may change;
+    their policies are the authoritative source. In the EEA, UK and Switzerland, analytics and
+    advertising cookies are used only after you give consent.
+  </p>
+  <div class="legal-table-wrap">
+    <table class="legal-table">
+      <thead><tr><th>Provider</th><th>Cookies</th><th>Purpose</th><th>Duration</th></tr></thead>
+      <tbody>
+        {third.map(([pr, n, p, d, url]) => (
+          <tr><td><a href={url} rel="noopener" target="_blank">{pr}</a></td><td class="mono">{n}</td><td>{p}</td><td>{d}</td></tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Google Fonts delivers the typefaces used on this site. It does not set cookies, but your browser
+    sends your IP address to Google when it downloads the fonts.
+  </p>
+
+  <h2 id="control">4. How to control cookies</h2>
+  <ul>
+    <li><strong>Consent choices:</strong> if you are shown a consent message, you can accept, reject or customise non-essential cookies, and change your choice later from the privacy link in that message.</li>
+    <li><strong>Personalised ads:</strong> visit <a href="https://adssettings.google.com" rel="noopener" target="_blank">Google Ad Settings</a>, <a href="https://optout.aboutads.info" rel="noopener" target="_blank">aboutads.info</a> or <a href="https://www.youronlinechoices.eu" rel="noopener" target="_blank">youronlinechoices.eu</a>.</li>
+    <li><strong>Analytics:</strong> use the <a href="https://tools.google.com/dlpage/gaoptout" rel="noopener" target="_blank">Google Analytics opt-out add-on</a>.</li>
+    <li><strong>Your browser:</strong> block or delete cookies and site data in your browser settings. All tools keep working, though your theme choice will not be remembered.</li>
+  </ul>
+
+  <h2 id="more">5. More information</h2>
+  <p>
+    See our <a href="/privacy">Privacy Policy</a> for how we handle personal information and your
+    rights. Questions? Email <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a>.
+  </p>
+</LegalPage>

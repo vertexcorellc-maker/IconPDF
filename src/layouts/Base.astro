@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { SITE_NAME, SITE_TAGLINE, TOOLS, ADSENSE } from '../site';
+import { SITE_NAME, SITE_TAGLINE, TOOLS, ADSENSE, LEGAL } from '../site';
 import AdSlot from '../components/AdSlot.astro';
 import { TOOL_CONTENT } from '../tool-content';
 
@@ -34,6 +34,16 @@ const schema: Record<string, unknown>[] = [
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: SITE_NAME,
+    legalName: LEGAL.entity,
+    email: LEGAL.email,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: LEGAL.address[0],
+      addressLocality: 'Albuquerque',
+      addressRegion: 'NM',
+      postalCode: '87110',
+      addressCountry: 'US',
+    },
     url: `${site}/`,
     logo: `${site}/favicon.svg`,
     description: SITE_TAGLINE,
@@ -221,7 +231,13 @@ if (faqItems && faqItems.length) {
     }
     <footer class="site-footer">
       <p>Private by design. Your files never leave this device.</p>
-      <p class="mono">© {new Date().getFullYear()} {SITE_NAME} · 100% free &amp; local</p>
+      <nav class="footer-links" aria-label="Legal">
+        <a href="/about">About &amp; Contact</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="/cookies">Cookies</a>
+      </nav>
+      <p class="mono">© {new Date().getFullYear()} {LEGAL.entity} · {SITE_NAME} is 100% free &amp; local</p>
     </footer>
     <script>
       import '../lib/workspace.ts';

@@ -1,0 +1,56 @@
+---
+import LegalPage from '../components/LegalPage.astro';
+import { LEGAL, SITE_NAME, TOOLS } from '../site';
+const L = LEGAL;
+const count = TOOLS.filter((t) => t.ready).length;
+---
+
+<LegalPage
+  title="About & Contact"
+  heading={`About ${SITE_NAME}`}
+  showUpdated={false}
+  description={`${SITE_NAME} is a free, private PDF toolkit that runs in your browser, operated by ${LEGAL.entity}. Learn how it works and how to contact us.`}
+  summary={`${SITE_NAME} is a free set of ${count} PDF tools that run entirely in your web browser. Your files are processed on your own device and are never uploaded.`}
+>
+  <h2 id="why">Why we built it</h2>
+  <p>
+    Most online PDF tools ask you to upload your documents to their servers: contracts, payslips,
+    medical letters, IDs. We think that's the wrong trade for a simple task like merging two files.
+    Modern browsers are powerful enough to do the work themselves, so {SITE_NAME} does everything on
+    your device. Nothing to upload, nothing to wait for, nothing left behind on someone else's server.
+  </p>
+
+  <h2 id="how">How it stays free</h2>
+  <p>
+    There are no accounts, subscriptions or paywalls. {SITE_NAME} is supported by advertising,
+    which never has access to your files. Because the processing happens on your computer, our
+    running costs stay low enough to keep every tool free and unlimited.
+  </p>
+
+  <h2 id="principles">Our principles</h2>
+  <ul>
+    <li><strong>Your files stay yours.</strong> Processed locally, never uploaded, never stored.</li>
+    <li><strong>No sign-up, no limits.</strong> Open a tool and use it.</li>
+    <li><strong>Honest tools.</strong> Each tool page explains what it does and what it doesn't.</li>
+  </ul>
+
+  <h2 id="company">Who runs {SITE_NAME}</h2>
+  <p>
+    {SITE_NAME} is owned and operated by {L.entity}, {L.entityType}.
+  </p>
+
+  <h2 id="contact">Contact us</h2>
+  <p>
+    For support, feedback, privacy or legal requests, email us. We read every message and reply as
+    soon as we can.
+  </p>
+  <address>
+    {L.entity}<br />
+    {L.address.map((line) => (<>{line}<br /></>))}
+    Email: <a href={`mailto:${L.email}`}>{L.email}</a>
+  </address>
+  <p class="muted">
+    Please don't email us documents. We never need your files to help, and keeping them off email
+    is the whole point.
+  </p>
+</LegalPage>

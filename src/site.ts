@@ -120,3 +120,18 @@ export const ADSENSE = {
 };
 
 export type AdSlotName = 'home-mid' | 'tool-rail' | 'tool-inline' | 'footer';
+
+// ---------------------------------------------------------------------------
+// Legal entity shown on /privacy, /terms, /cookies, /about and in the footer.
+// Source: New Mexico Certificate of Organization, Entity ID 0008122301 (filed 2026-08-10).
+// Bump LEGAL_UPDATED whenever the policy text changes in a meaningful way.
+// ---------------------------------------------------------------------------
+export const LEGAL = {
+  entity: 'Vertex Core LLC',
+  entityType: 'a New Mexico limited liability company',
+  address: ['1209 Mountain Road Pl NE, Ste N', 'Albuquerque, NM 87110', 'United States'],
+  email: 'support@votexarch.com',
+  state: 'New Mexico',
+  venue: 'the state and federal courts located in Bernalillo County, New Mexico',
+  updated: 'November 27, 2026',
+};
